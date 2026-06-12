@@ -1,0 +1,829 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+  --primary-blue: #32397C;
+  --accent-yellow: #FFEA00;
+  --text-main: #222;
+  --text-muted: #666;
+  --bg-light: #F8F9FA;
+  --border-light: #eee;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-main);
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; outline: none; }
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.nav-brand {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+}
+
+.nav-links a {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  padding-bottom: 5px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover { color: var(--accent-yellow); }
+
+.nav-links a.active {
+  border-bottom: 2px solid var(--accent-yellow);
+  font-weight: 600;
+}
+
+.nav-logout {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 8px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.nav-logout:hover {
+  background-color: #fff;
+  color: var(--primary-blue);
+}
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1549468057-5b64301ba69a?q=80&w=2070&auto=format&fit=crop') center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.hero-floating-card {
+  background: #fff;
+  width: 85%;
+  max-width: 1000px;
+  border-radius: 20px;
+  padding: 40px;
+  position: absolute;
+  bottom: -60px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.card-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.card-header h1 span { color: var(--primary-blue); }
+
+.card-header p {
+  color: var(--text-muted);
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+/* Form (Search Bar Style) */
+.hero-form {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--border-light);
+  padding-top: 20px;
+}
+
+.form-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-right: 1px solid var(--border-light);
+  padding: 0 20px;
+}
+
+.form-item:first-child { padding-left: 0; }
+.form-item.no-border { border-right: none; }
+
+.form-icon {
+  font-size: 20px;
+  color: #999;
+}
+
+.form-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-text label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.form-text input {
+  font-size: 13px;
+  color: var(--text-muted);
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+.form-text input::placeholder { color: #bbb; }
+.placeholder-text { font-size: 13px; color: #bbb; }
+
+.btn-search {
+  background-color: var(--accent-yellow);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-main);
+  flex-shrink: 0;
+  transition: 0.3s;
+}
+
+.btn-search:hover { transform: scale(1.05); }
+
+/* =========================================
+   INOVASI TERBARU SECTION
+   ========================================= */
+.inovasi-section {
+  margin-top: 60px; /* Jarak untuk floating card */
+  padding: 100px 8%;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1000&auto=format&fit=crop') center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.section-title-white {
+  color: #fff;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.inovasi-container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.inovasi-content {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.inovasi-content h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  display: inline-block;
+  border-bottom: 2px solid var(--text-main);
+  padding-bottom: 5px;
+}
+
+.inovasi-content p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.inovasi-image-wrapper {
+  flex: 1;
+}
+
+.inovasi-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.btn-yellow {
+  background: var(--accent-yellow);
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================================
+   IDE TERBARU SECTION
+   ========================================= */
+.ide-section {
+  padding: 80px 8%;
+}
+
+.ide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.ide-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.ide-nav button {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-left: 10px;
+  color: var(--text-muted);
+}
+
+.ide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.ide-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.ide-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.ide-card-body {
+  padding: 25px;
+}
+
+.ide-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.ide-card-body h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.ide-card-body p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.ide-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A73E8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ide-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+.dot.active { background: var(--text-main); }
+
+/* =========================================
+   FOOTER
+   ========================================= */
+.footer-section {
+  background: var(--primary-blue);
+  color: #fff;
+  padding: 60px 8% 20px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.footer-col h5 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+  font-size: 13px;
+  color: #ddd;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-socials a {
+  background: #fff;
+  color: var(--primary-blue);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 20px;
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.footer-payments {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-payments img {
+  height: 20px;
+  background: #fff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* =========================================
+   NEWS PAGE & COMPACT HEADER
+   ========================================= */
+.compact-header {
+  position: relative;
+  height: 40vh; /* Lebih pendek dari Hero Home */
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2070&auto=format&fit=crop') center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.compact-header-content {
+  color: #fff;
+  padding: 0 20px;
+}
+
+.compact-header-content h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.compact-header-content p {
+  font-size: 16px;
+  color: #ddd;
+}
+
+/* =========================================
+   STATUS BADGE & CARD META
+   ========================================= */
+.card-meta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Menghilangkan margin bottom bawaan agar sejajar dengan badge */
+.card-meta-top .ide-date {
+  margin-bottom: 0; 
+}
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Variasi Warna Badge */
+.status-badge.menunggu {
+  background-color: #FFF3CD;
+  color: #856404;
+}
+
+.status-badge.diproses,
+.status-badge.proses {
+  background-color: #CCE5FF;
+  color: #004085;
+}
+
+.status-badge.selesai {
+  background-color: #D4EDDA;
+  color: #155724;
+}
+
+.card-meta-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-light);
+  padding-top: 15px;
+  margin-top: auto; /* Mendorong ke bawah jika deskripsi pendek */
+}
+
+.card-meta-bottom .author {
+  font-size: 13px;
+  color: var(--primary-blue);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-meta-bottom .votes {
+  display: flex;
+  gap: 15px;
+}
+
+.vote-item {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.vote-item.like { color: #1A73E8; } /* Biru untuk like */
+.vote-item.dislike { color: #EA4335; } /* Merah untuk dislike */
+
+/* =========================================
+   LOADING & ERROR STATES
+   ========================================= */
+.status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  gap: 15px;
+  width: 100%;
+}
+
+.status-container p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.status-container.error { 
+  color: #EA4335; 
+}
+
+/* =========================================
+   PROFILE PAGE SPECIFIC STYLES
+   ========================================= */
+
+/* Menyesuaikan tinggi header profil */
+.profile-header-bg {
+  height: 35vh; 
+  align-items: flex-start; /* Menghentikan flex center dari news */
+}
+
+/* Layout Utama Profile (Flexbox 3 Kolom) */
+.profile-layout-container {
+  display: flex;
+  padding: 0 8%;
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+/* --- SIDEBAR IKON KIRI --- */
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 50px; /* Jarak dari atas konten putih */
+  flex-shrink: 0;
+}
+
+.sidebar-icon {
+  font-size: 26px;
+  color: var(--primary-blue);
+  background: transparent;
+  transition: 0.3s;
+}
+
+.sidebar-icon:hover {
+  transform: scale(1.1);
+}
+
+.sidebar-icon.active {
+  color: var(--text-main);
+}
+
+.sidebar-icon.user-icon {
+  font-size: 32px; /* Ikon user sedikit lebih besar di gambar */
+}
+
+
+/* --- PROFILE CARD (TENGAH) --- */
+.profile-card-wrapper {
+  margin-top: -100px; /* Membuat card menembus/overlapping header */
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.profile-main-card {
+  width: 320px;
+  background: #fff;
+  border-radius: 160px 160px 0 0; /* Membuat efek melengkung bulat di atas */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  position: relative;
+  overflow: hidden; /* Penting untuk memotong dekorasi bawah */
+}
+
+.profile-avatar-container {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  padding: 5px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 5px;
+}
+
+.profile-role {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.profile-location {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+
+.profile-location i {
+  color: var(--primary-blue);
+}
+
+/* Cari dan ubah .profile-stats menjadi seperti ini: */
+.profile-stats {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 25px; /* <-- Ubah dari 120px menjadi 25px */
+}
+
+/* Tambahkan class baru ini di bawah .profile-stats */
+.btn-logout-profile {
+  background-color: transparent;
+  border: 1px solid #EA4335; /* Warna merah Google */
+  color: #EA4335;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+  z-index: 5;
+  margin-bottom: 90px; /* Mendorong dekorasi geometri agar tetap di bawah */
+}
+
+.btn-logout-profile:hover {
+  background-color: #EA4335;
+  color: white;
+}
+.stat-box {
+  text-align: center;
+}
+
+.stat-box h4 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 2px;
+}
+
+.stat-box span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Dekorasi Geometris di Bawah Card Profile */
+.profile-card-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+}
+
+.decor-yellow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-yellow);
+  clip-path: polygon(0 100%, 0 40%, 65% 100%);
+  z-index: 1;
+}
+
+.decor-blue {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-blue);
+  clip-path: polygon(100% 0, 100% 100%, 15% 100%);
+  z-index: 2;
+}
+
+
+/* --- KONTEN AREA (KANAN) --- */
+.profile-content-area {
+  flex: 1; /* Mengisi sisa ruang di sebelah kanan */
+  padding-top: 40px; /* Menyelaraskan dengan card */
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.profile-tabs button {
+  font-size: 18px;
+  font-weight: 600;
+  color: #bbb;
+  padding-bottom: 8px;
+  border-bottom: 3px solid transparent;
+  transition: 0.3s;
+}
+
+.profile-tabs button.active {
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
+}
+
+.profile-tabs button:hover:not(.active) {
+  color: var(--text-muted);
+}
+
+/* Grid Postingan (Draft) */
+.profile-post-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 Kolom sesuai gambar */
+  gap: 30px;
+}
+
+.profile-post-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.profile-post-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.profile-post-body {
+  padding: 20px;
+}
+
+.profile-post-body .post-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.profile-post-body h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.profile-post-body p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
