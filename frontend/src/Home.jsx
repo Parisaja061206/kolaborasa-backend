@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Navbar from './Navbar' // Pastikan meng-import Navbar
 import './App.css'
 
 function Home() {
@@ -60,9 +59,6 @@ function Home() {
     <>
       {/* --- 1. HERO SECTION --- */}
       <section className="hero-section">
-        {/* Navbar dipanggil di dalam hero-section agar menyatu dengan background */}
-        <Navbar />
-        
         <div className="hero-floating-card">
           <div className="card-header">
             {/* Dinamis menyapa user jika ada namanya */}

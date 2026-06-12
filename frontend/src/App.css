@@ -27,6 +27,219 @@ ul { list-style: none; }
 button { cursor: pointer; border: none; background: none; outline: none; }
 
 /* =========================================
+   LANDING PAGE STYLES
+   ========================================= */
+
+.landing-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.landing-hero-bg {
+  /* Tinggi disesuaikan agar sisa layar bisa menampilkan sedikit footer */
+  min-height: 85vh; 
+  /* Memberikan warna overlay kebiruan transparan di atas gambar kota */
+  background: linear-gradient(rgba(50, 57, 124, 0.7), rgba(50, 57, 124, 0.7)), 
+              url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Efek Kaca Transparan (Glassmorphism) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15); 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 70px 40px;
+  text-align: center;
+  color: #fff;
+  width: 90%;
+  max-width: 750px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-title {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.glass-divider {
+  border: none;
+  height: 2px;
+  background-color: #fff;
+  width: 60%;
+  margin: 0 auto 30px auto;
+}
+
+.glass-subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.btn-mulai {
+  display: inline-block;
+  background-color: var(--accent-yellow);
+  color: var(--text-main);
+  padding: 12px 50px;
+  border-radius: 4px; /* Tidak terlalu bulat mengikuti gambar */
+  font-weight: 700;
+  font-size: 16px;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(255, 234, 0, 0.3);
+}
+
+.btn-mulai:hover {
+  background-color: #e6d300;
+  transform: scale(1.05);
+}
+
+/* =========================================
+   LOGIN PAGE SPECIFIC STYLES
+   ========================================= */
+
+/* Penyesuaian khusus untuk panel di halaman Login */
+.login-panel {
+  padding: 50px 60px; /* Sedikit lebih padat dari landing page */
+  max-width: 600px;
+}
+
+.login-title {
+  font-size: 32px;
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+/* Form Styling di dalam Panel Kaca */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.form-group-glass {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-glass label {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.form-group-glass input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255, 255, 255, 0.85); /* Abu-abu terang agak transparan */
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-group-glass input:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(255, 234, 0, 0.5);
+}
+
+/* Remember Me Checkbox */
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+.remember-me input[type="checkbox"] {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.remember-me label {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+/* Penyesuaian Tombol */
+.btn-full {
+  width: 100%;
+  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-google {
+  width: 100%;
+  background: #fff;
+  color: var(--text-main);
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.btn-google:hover {
+  background: #f1f1f1;
+}
+
+.btn-google img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Teks Link di Bawah Form */
+.auth-link-text {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.auth-link-text a {
+  color: var(--accent-yellow);
+  font-weight: 600;
+}
+
+.auth-link-text a:hover {
+  text-decoration: underline;
+}
+
+/* Pesan Error di dalam Panel */
+.glass-error-message {
+  background: rgba(234, 67, 53, 0.2);
+  border: 1px solid #EA4335;
+  color: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* =========================================
    NAVBAR
    ========================================= */
 .navbar {
@@ -673,12 +886,36 @@ button { cursor: pointer; border: none; background: none; outline: none; }
 }
 
 /* Cari dan ubah .profile-stats menjadi seperti ini: */
+/* Cari dan ubah .profile-stats menjadi seperti ini: */
 .profile-stats {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
   padding: 0 20px;
   margin-bottom: 25px; /* <-- Ubah dari 120px menjadi 25px */
+}
+
+/* Tambahkan class baru ini di bawah .profile-stats */
+.btn-logout-profile {
+  background-color: transparent;
+  border: 1px solid #EA4335; /* Warna merah Google */
+  color: #EA4335;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+  z-index: 5;
+  margin-bottom: 90px; /* Mendorong dekorasi geometri agar tetap di bawah */
+}
+
+.btn-logout-profile:hover {
+  background-color: #EA4335;
+  color: white;
 }
 
 /* Tambahkan class baru ini di bawah .profile-stats */

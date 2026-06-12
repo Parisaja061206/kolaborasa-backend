@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Navbar from './Navbar'; // Pastikan Navbar di-import
 import './App.css';
 
 function News() {
@@ -36,7 +35,6 @@ function News() {
     <>
       {/* HEADER COMPACT UNTUK HALAMAN NEWS */}
       <section className="compact-header">
-        <Navbar />
         <div className="compact-header-content">
           <h1>News Feed Aspirasi</h1>
           <p>Daftar ide dan inovasi terbaru dari warga untuk kemajuan kota</p>
