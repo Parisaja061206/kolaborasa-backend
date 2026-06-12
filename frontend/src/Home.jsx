@@ -1,130 +1,125 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './App.css'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
+import './App.css';
 
 function Home() {
-  const [judul, setJudul] = useState('')
-  const [deskripsi, setDeskripsi] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const navigate = useNavigate()
+  // 1. STATE UNTUK SLIDER
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const userStr = localStorage.getItem('user')
-  const user = userStr ? JSON.parse(userStr) : null
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php'
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!judul || !deskripsi) {
-      alert('Judul dan deskripsi harus diisi!')
-      return
+  // Data Dummy untuk Ide Terbaru (Dibuat lebih dari 3 agar bisa digeser)
+  const ideTerbaruData = [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=600&auto=format&fit=crop",
+      date: "February 20, 2024",
+      title: "Drone Pintar untuk Pemantauan Kota dalam Konsep Smart City",
+      desc: "Dalam kegiatan pengembangan ide Smart City, masyarakat mengusulkan pemanfaatan drone pintar sebagai solusi..."
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
+      date: "February 21, 2024",
+      title: "Ide Smart Parking untuk Mengurangi Kemacetan",
+      desc: "Dalam upaya mendukung pengembangan Smart City, masyarakat mencetuskan ide Smart Parking System yang terintegrasi."
+    },
+    {
+      id: 3,
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop",
+      date: "February 22, 2024",
+      title: "Robot Jadi Ide Inovatif untuk Mendukung Smart City",
+      desc: "Memperkenalkan gagasan penggunaan robot kebersihan otomatis sebagai bagian dari konsep Smart City ramah lingkungan."
+    },
+    {
+      id: 4,
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop",
+      date: "February 25, 2024",
+      title: "Aplikasi Pelaporan Fasilitas Umum Berbasis AI",
+      desc: "Inovasi untuk memudahkan warga melaporkan jalan berlubang atau lampu mati hanya dengan memotret menggunakan AI."
+    },
+    {
+      id: 5,
+      image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=600&auto=format&fit=crop",
+      date: "March 01, 2024",
+      title: "Manajemen Sampah Terpadu dengan Sensor IoT",
+      desc: "Penggunaan sensor pada tempat sampah umum untuk mendeteksi kapasitas dan mengoptimalkan rute truk sampah."
     }
+  ];
 
-    setSubmitting(true)
-    try {
-      if (!user) {
-        alert('Anda harus login terlebih dahulu!');
-        setSubmitting(false);
-        return;
-      }
+  // 2. FUNGSI GESER SLIDER
+  const maxIndex = ideTerbaruData.length - 3; // Menampilkan 3 card sekaligus
 
-      const payload = {
-        id_user: user.id_user, 
-        judul_ide: judul,
-        deskripsi: deskripsi
-      }
-
-      const response = await fetch(`${API_URL}/Aspirasi/tambah`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      const result = await response.json()
-      if (result.status === 'sukses') {
-        alert('Aspirasi berhasil dikirim!')
-        setJudul('')
-        setDeskripsi('')
-        navigate('/news')
-      } else {
-        alert(result.pesan || 'Gagal mengirim aspirasi')
-      }
-    } catch (err) {
-      alert('Terjadi kesalahan: ' + err.message)
-    } finally {
-      setSubmitting(false)
+  const nextSlide = () => {
+    if (currentIndex < maxIndex) {
+      setCurrentIndex(currentIndex + 1);
     }
-  }
+  };
+
+  const prevSlide = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  // Gaya Inline untuk Hero Background
+  const heroStyle = {
+    position: 'relative',
+    height: '85vh',
+    background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)), url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop')`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: '#32397C'
+  };
 
   return (
     <>
-      {/* --- 1. HERO SECTION --- */}
-      <section className="hero-section">
+      <section style={heroStyle}>
+        <Navbar />
         <div className="hero-floating-card">
           <div className="card-header">
-            {/* Dinamis menyapa user jika ada namanya */}
-            <h1>Selamat Datang di <span>Kolaborasa</span>{user?.nama ? `, ${user.nama}` : ''}</h1>
+            <h1>Selamat Datang di <span>Kolaborasa</span></h1>
             <p>Bagikan ide mu untuk memajukan kota mu</p>
           </div>
-
-          <form onSubmit={handleSubmit} className="hero-form">
-            <div className="form-item">
-              <i className="fa-solid fa-location-dot form-icon"></i>
-              <div className="form-text">
-                <label htmlFor="judul">Judul Ide</label>
-                <input 
-                  type="text" 
-                  id="judul"
-                  value={judul} 
-                  onChange={(e) => setJudul(e.target.value)}
-                  placeholder="Ketik judul inovasi..."
-                  required
-                />
+          <div className="hero-search-bar">
+            <div className="search-item">
+              <i className="fa-solid fa-location-dot search-icon"></i>
+              <div className="search-text">
+                <label>Location</label>
+                <span>Add destination</span>
               </div>
             </div>
-
-            <div className="form-item">
-              <i className="fa-regular fa-lightbulb form-icon"></i>
-              <div className="form-text">
-                <label htmlFor="deskripsi">Deskripsi Ide</label>
-                <input 
-                  type="text" 
-                  id="deskripsi"
-                  value={deskripsi} 
-                  onChange={(e) => setDeskripsi(e.target.value)}
-                  placeholder="Detail singkat ide..."
-                  required
-                />
+            <div className="search-item">
+              <i className="fa-regular fa-lightbulb search-icon"></i>
+              <div className="search-text">
+                <label>Total Ide</label>
+                <span>Add dates</span>
               </div>
             </div>
-
-            <div className="form-item no-border">
-              <i className="fa-regular fa-file-lines form-icon"></i>
-              <div className="form-text">
-                <label>Status</label>
-                <span className="placeholder-text">Aspirasi Baru</span>
+            <div className="search-item no-border">
+              <i className="fa-regular fa-file-lines search-icon"></i>
+              <div className="search-text">
+                <label>Draft Ide</label>
+                <span>Add dates</span>
               </div>
             </div>
-
-            <button type="submit" disabled={submitting} className="btn-search">
-              {submitting ? (
-                <i className="fa-solid fa-spinner fa-spin"></i>
-              ) : (
-                <i className="fa-solid fa-magnifying-glass"></i>
-              )}
+            <button className="btn-search-circle">
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
-          </form>
+          </div>
         </div>
       </section>
 
-      {/* --- 2. INOVASI TERBARU SECTION --- */}
+      {/* INOVASI SECTION */}
       <section className="inovasi-section">
         <h2 className="section-title-white">INOVASI TERBARU</h2>
         <div className="inovasi-container">
           <div className="inovasi-content">
             <h3>Berbagai Ide Inovatif untuk Mewujudkan Smart City</h3>
-            <p>
-              <strong>Banjar, 9 Juni 2025</strong> – Sejumlah mahasiswa dari berbagai program studi menggelar diskusi dan sesi brainstorming untuk menuangkan ide-ide inovatif yang dapat mendorong pengembangan konsep Smart City di Indonesia. Kegiatan ini bertujuan menghasilkan solusi kreatif yang mampu menjawab berbagai tantangan perkotaan, mulai dari kemacetan, pengelolaan sampah, hingga pelayanan publik.
-            </p>
+            <p><strong>Banjar, 9 Juni 2025</strong> – Sejumlah mahasiswa dari berbagai program studi menggelar diskusi dan sesi brainstorming untuk menuangkan ide-ide inovatif yang dapat mendorong pengembangan konsep Smart City di Indonesia. Kegiatan ini bertujuan menghasilkan solusi kreatif yang mampu menjawab berbagai tantangan perkotaan, mulai dari kemacetan, pengelolaan sampah, hingga pelayanan publik.</p>
           </div>
           <div className="inovasi-image-wrapper">
             <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=1000&auto=format&fit=crop" alt="Smart City" />
@@ -133,56 +128,57 @@ function Home() {
         <button className="btn-yellow">Lihat Semua <i className="fa-solid fa-arrow-right"></i></button>
       </section>
 
-      {/* --- 3. IDE TERBARU SECTION --- */}
+      {/* ================= IDE TERBARU SECTION (INTERAKTIF) ================= */}
       <section className="ide-section">
         <div className="ide-header">
-          <h2>Ide Terbaru</h2>
-          <div className="ide-nav">
-            <button><i className="fa-solid fa-chevron-left"></i></button>
-            <button><i className="fa-solid fa-chevron-right"></i></button>
+          {/* Judul dipastikan warnanya gelap */}
+          <h2 className="ide-title-dark">Ide Terbaru</h2>
+          
+          <div className="ide-nav-buttons">
+            <button onClick={prevSlide} disabled={currentIndex === 0} className={currentIndex === 0 ? 'disabled' : ''}>
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
+            <button onClick={nextSlide} disabled={currentIndex >= maxIndex} className={currentIndex >= maxIndex ? 'disabled' : ''}>
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
         </div>
 
-        <div className="ide-grid">
-          <div className="ide-card">
-            <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=600&auto=format&fit=crop" alt="Drone Pintar" />
-            <div className="ide-card-body">
-              <span className="ide-date"><i className="fa-regular fa-calendar"></i> February 20, 2024</span>
-              <h4>Drone Pintar untuk Pemantauan Kota dalam Konsep Smart City</h4>
-              <p>Dalam kegiatan pengembangan ide Smart City, masyarakat mengusulkan pemanfaatan drone pintar sebagai solusi untuk meningkatkan efisiensi pemantauan kondisi perkotaan.</p>
-              <a href="#" className="ide-link"><i className="fa-solid fa-chevron-right"></i> See more</a>
-            </div>
-          </div>
-
-          <div className="ide-card">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop" alt="Smart Parking" />
-            <div className="ide-card-body">
-              <span className="ide-date"><i className="fa-regular fa-calendar"></i> February 20, 2024</span>
-              <h4>Ide Smart Parking untuk Mengurangi Kemacetan</h4>
-              <p>Dalam upaya mendukung pengembangan Smart City, masyarakat mencetuskan ide Smart Parking System.</p>
-              <a href="#" className="ide-link"><i className="fa-solid fa-chevron-right"></i> See more</a>
-            </div>
-          </div>
-
-          <div className="ide-card">
-            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop" alt="Robot Inovatif" />
-            <div className="ide-card-body">
-              <span className="ide-date"><i className="fa-regular fa-calendar"></i> February 20, 2024</span>
-              <h4>Robot Jadi Ide Inovatif untuk Mendukung Smart City</h4>
-              <p>Memperkenalkan gagasan penggunaan robot kebersihan otomatis sebagai bagian dari konsep Smart City.</p>
-              <a href="#" className="ide-link"><i className="fa-solid fa-chevron-right"></i> See more</a>
-            </div>
+        {/* Pembungkus Slider (Menyembunyikan card yang keluar batas) */}
+        <div className="ide-slider-container">
+          {/* Track yang akan bergeser */}
+          <div 
+            className="ide-track" 
+            style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 10px)))` }}
+          >
+            {ideTerbaruData.map((item) => (
+              <div className="ide-card" key={item.id}>
+                <img src={item.image} alt={item.title} />
+                <div className="ide-card-body">
+                  <span className="ide-date"><i className="fa-regular fa-calendar"></i> {item.date}</span>
+                  <h4>{item.title}</h4>
+                  <p>{item.desc}</p>
+                  <a href="#" className="ide-link"><i className="fa-solid fa-angle-right"></i> See more</a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="ide-dots">
-          <span className="dot active"></span>
-          <span className="dot"></span>
-          <span className="dot"></span>
+          {/* Titik indikator dibuat dinamis */}
+          {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+            <span 
+              key={idx} 
+              className={`dot ${currentIndex === idx ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+              style={{cursor: 'pointer'}}
+            ></span>
+          ))}
         </div>
       </section>
 
-      {/* --- 4. FOOTER --- */}
+      {/* ================= FOOTER ================= */}
       <footer className="footer-section">
         <div className="footer-grid">
           <div className="footer-col">
@@ -231,7 +227,7 @@ function Home() {
         </div>
       </footer>
     </>
-  )
+  );
 }
 
 export default Home;
