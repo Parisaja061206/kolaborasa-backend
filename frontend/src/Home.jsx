@@ -1,13 +1,91 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import './App.css';
 
 function Home() {
-  // 1. STATE UNTUK SLIDER
+  const navigate = useNavigate();
+  const userStr = localStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : null;
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php';
+
+  // --- STATE DASHBOARD & SLIDER ---
+  const [stats, setStats] = useState({ totalIde: 0, draftIde: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Data Dummy untuk Ide Terbaru (Dibuat lebih dari 3 agar bisa digeser)
+  // --- STATE UNTUK MODAL PENAMBAHAN IDE ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ judul: '', teks: '' });
+  const [submitting, setSubmitting] = useState(false);
+
+  // --- FUNGSI MENGAMBIL STATISTIK DARI BACKEND ---
+  const fetchUserStats = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`${API_URL}/Aspirasi/user_stats/${user.id_user}`);
+      const result = await response.json();
+      if (result.status === 'sukses') {
+        setStats({
+          totalIde: result.data.total_ide,
+          draftIde: result.data.draft_ide
+        });
+      }
+    } catch (err) {
+      console.error("Gagal mengambil statistik pengguna:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserStats();
+  }, [user, API_URL]);
+
+  // --- FUNGSI MENGIRIM IDE (DRAFT / PUBLISH) ---
+  const handleSubmit = async (status) => {
+    if (!formData.judul || !formData.teks) {
+      alert("Harap isi Judul dan Teks ide Anda!");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await fetch(`${API_URL}/Aspirasi/tambah`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_user: user.id_user,
+          judul_ide: formData.judul,
+          deskripsi: formData.teks,
+          status_progress: status // Akan berisi 'Draft' atau 'Menunggu'
+        })
+      });
+
+      const result = await response.json();
+      if (result.status === 'sukses') {
+        alert(status === 'Draft' ? "Ide berhasil disimpan ke Draft!" : "Ide Berhasil diunggah!");
+        setIsModalOpen(false); // Tutup modal
+        setFormData({ judul: '', teks: '' }); // Kosongkan form
+        fetchUserStats(); // Refresh angka statistik di dashboard tanpa perlu reload halaman
+      } else {
+        alert(result.pesan || "Terjadi kesalahan saat menyimpan.");
+      }
+    } catch (err) {
+      alert("Terjadi kesalahan sistem: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Fungsi saat tombol tambah (+) ditekan
+  const handleAddIdea = () => {
+    if (!user) {
+      alert("Anda harus login terlebih dahulu!");
+      navigate('/login');
+      return;
+    }
+    setIsModalOpen(true); 
+  };
+
+  // Data Slider 
   const ideTerbaruData = [
     {
       id: 1,
@@ -36,32 +114,13 @@ function Home() {
       date: "February 25, 2024",
       title: "Aplikasi Pelaporan Fasilitas Umum Berbasis AI",
       desc: "Inovasi untuk memudahkan warga melaporkan jalan berlubang atau lampu mati hanya dengan memotret menggunakan AI."
-    },
-    {
-      id: 5,
-      image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=600&auto=format&fit=crop",
-      date: "March 01, 2024",
-      title: "Manajemen Sampah Terpadu dengan Sensor IoT",
-      desc: "Penggunaan sensor pada tempat sampah umum untuk mendeteksi kapasitas dan mengoptimalkan rute truk sampah."
     }
   ];
 
-  // 2. FUNGSI GESER SLIDER
-  const maxIndex = ideTerbaruData.length - 3; // Menampilkan 3 card sekaligus
+  const maxIndex = ideTerbaruData.length - 3;
+  const nextSlide = () => { if (currentIndex < maxIndex) setCurrentIndex(currentIndex + 1); };
+  const prevSlide = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
 
-  const nextSlide = () => {
-    if (currentIndex < maxIndex) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const prevSlide = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  // Gaya Inline untuk Hero Background
   const heroStyle = {
     position: 'relative',
     height: '85vh',
@@ -77,6 +136,7 @@ function Home() {
 
   return (
     <>
+      {/* ================= HERO SECTION ================= */}
       <section style={heroStyle}>
         <Navbar />
         <div className="hero-floating-card">
@@ -84,36 +144,47 @@ function Home() {
             <h1>Selamat Datang di <span>Kolaborasa</span></h1>
             <p>Bagikan ide mu untuk memajukan kota mu</p>
           </div>
+          
+          {/* AREA SUMMARY DASHBOARD */}
           <div className="hero-search-bar">
+            
+            {/* 1. Menampilkan Lokasi Pengguna */}
             <div className="search-item">
               <i className="fa-solid fa-location-dot search-icon"></i>
               <div className="search-text">
                 <label>Location</label>
-                <span>Add destination</span>
+                <span>{user?.lokasi || 'Bandung, Indonesia'}</span>
               </div>
             </div>
+            
+            {/* 2. Menampilkan Total Ide */}
             <div className="search-item">
               <i className="fa-regular fa-lightbulb search-icon"></i>
               <div className="search-text">
                 <label>Total Ide</label>
-                <span>Add dates</span>
+                <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{stats.totalIde} Ide</span>
               </div>
             </div>
+            
+            {/* 3. Menampilkan Total Draft */}
             <div className="search-item no-border">
               <i className="fa-regular fa-file-lines search-icon"></i>
               <div className="search-text">
                 <label>Draft Ide</label>
-                <span>Add dates</span>
+                <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{stats.draftIde} Draft</span>
               </div>
             </div>
-            <button className="btn-search-circle">
-              <i className="fa-solid fa-magnifying-glass"></i>
+            
+            {/* 4. Tombol Ikon Tambah (+) */}
+            <button className="btn-search-circle" onClick={handleAddIdea} title="Buat Ide Baru">
+              <i className="fa-solid fa-plus"></i>
             </button>
+            
           </div>
         </div>
       </section>
 
-      {/* INOVASI SECTION */}
+      {/* ================= INOVASI SECTION ================= */}
       <section className="inovasi-section">
         <h2 className="section-title-white">INOVASI TERBARU</h2>
         <div className="inovasi-container">
@@ -128,12 +199,10 @@ function Home() {
         <button className="btn-yellow">Lihat Semua <i className="fa-solid fa-arrow-right"></i></button>
       </section>
 
-      {/* ================= IDE TERBARU SECTION (INTERAKTIF) ================= */}
+      {/* ================= IDE TERBARU SECTION ================= */}
       <section className="ide-section">
         <div className="ide-header">
-          {/* Judul dipastikan warnanya gelap */}
           <h2 className="ide-title-dark">Ide Terbaru</h2>
-          
           <div className="ide-nav-buttons">
             <button onClick={prevSlide} disabled={currentIndex === 0} className={currentIndex === 0 ? 'disabled' : ''}>
               <i className="fa-solid fa-chevron-left"></i>
@@ -144,13 +213,8 @@ function Home() {
           </div>
         </div>
 
-        {/* Pembungkus Slider (Menyembunyikan card yang keluar batas) */}
         <div className="ide-slider-container">
-          {/* Track yang akan bergeser */}
-          <div 
-            className="ide-track" 
-            style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 10px)))` }}
-          >
+          <div className="ide-track" style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 10px)))` }}>
             {ideTerbaruData.map((item) => (
               <div className="ide-card" key={item.id}>
                 <img src={item.image} alt={item.title} />
@@ -166,7 +230,6 @@ function Home() {
         </div>
 
         <div className="ide-dots">
-          {/* Titik indikator dibuat dinamis */}
           {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
             <span 
               key={idx} 
@@ -180,52 +243,70 @@ function Home() {
 
       {/* ================= FOOTER ================= */}
       <footer className="footer-section">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <h5>Support</h5>
-            <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Safety information</a></li>
-              <li><a href="#">Cancellation options</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h5>Company</h5>
-            <ul>
-              <li><a href="#">About us</a></li>
-              <li><a href="#">Privacy policy</a></li>
-              <li><a href="#">Community Blog</a></li>
-              <li><a href="#">Terms of service</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h5>Contact</h5>
-            <ul>
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">Get in touch</a></li>
-              <li><a href="#">Partnerships</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h5>Social</h5>
-            <div className="footer-socials">
-              <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
-              <a href="#"><i className="fa-brands fa-twitter"></i></a>
-              <a href="#"><i className="fa-brands fa-tiktok"></i></a>
-              <a href="#"><i className="fa-brands fa-youtube"></i></a>
+        <div className="footer-bottom" style={{ borderTop: 'none', paddingTop: '0', justifyContent: 'center' }}>
+          <p>© 2026 Asanda. All rights reserved.</p>
+        </div>
+      </footer>
+
+      {/* ================= POPUP / MODAL PENAMBAHAN IDE ================= */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
+            <h2 className="modal-brand">KOLABORASA</h2>
+            
+            <div className="form-container-modal">
+              <div className="form-group">
+                <label>JUDUL</label>
+                <input 
+                  type="text" 
+                  value={formData.judul}
+                  onChange={(e) => setFormData({...formData, judul: e.target.value})}
+                  placeholder="Ketik judul ide..."
+                  disabled={submitting}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>GAMBAR</label>
+                <div className="upload-placeholder">
+                  <i className="fa-solid fa-cloud-arrow-up"></i>
+                  <span>Tekan Untuk Upload</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>TEKS</label>
+                <textarea 
+                  rows="6"
+                  value={formData.teks}
+                  onChange={(e) => setFormData({...formData, teks: e.target.value})}
+                  placeholder="Deskripsikan ide cerdasmu secara detail..."
+                  disabled={submitting}
+                ></textarea>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="modal-actions">
+                <button 
+                  className="btn-draft" 
+                  disabled={submitting}
+                  onClick={() => handleSubmit('Draft')}
+                >
+                  {submitting ? 'Memproses...' : 'Simpan Draft'}
+                </button>
+                <button 
+                  className="btn-publish" 
+                  disabled={submitting}
+                  onClick={() => handleSubmit('Menunggu')}
+                >
+                  {submitting ? 'Mengirim...' : 'Unggah'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div className="footer-bottom">
-          <p>© Copyright Asanda 2024</p>
-          <div className="footer-payments">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png" alt="Visa" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/120px-Mastercard-logo.svg.png" alt="Mastercard" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/120px-PayPal.svg.png" alt="PayPal" />
-          </div>
-        </div>
-      </footer>
+      )}
     </>
   );
 }
