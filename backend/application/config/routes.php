@@ -52,3 +52,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['api/ide'] = 'ApiIde/index';
+$route['api/ide/tambah'] = 'ApiIde/tambah';
+$route['api/ide/(:num)'] = 'ApiIde/detail/$1';
+$route['api/ide/(:num)/like'] = 'ApiIde/like/$1';
+$route['api/statistik'] = 'ApiIde/statistik';
+$route['api/lokasi'] = 'ApiIde/lokasi';
+
+$route['api/komentar/(:num)'] = 'ApiKomentar/ide/$1';
+$route['api/komentar/tambah'] = 'ApiKomentar/tambah';
+$route['api/komentar/like/(:num)'] = 'ApiKomentar/like/$1';
+
