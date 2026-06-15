@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './App.css'
+import Footer from './components/Footer'
 
 function Register() {
   const [formData, setFormData] = useState({

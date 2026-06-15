@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import './App.css';
 
 function Home() {
@@ -87,34 +88,7 @@ function Home() {
 
   // Data Slider 
   const ideTerbaruData = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=600&auto=format&fit=crop",
-      date: "February 20, 2024",
-      title: "Drone Pintar untuk Pemantauan Kota dalam Konsep Smart City",
-      desc: "Dalam kegiatan pengembangan ide Smart City, masyarakat mengusulkan pemanfaatan drone pintar sebagai solusi..."
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
-      date: "February 21, 2024",
-      title: "Ide Smart Parking untuk Mengurangi Kemacetan",
-      desc: "Dalam upaya mendukung pengembangan Smart City, masyarakat mencetuskan ide Smart Parking System yang terintegrasi."
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop",
-      date: "February 22, 2024",
-      title: "Robot Jadi Ide Inovatif untuk Mendukung Smart City",
-      desc: "Memperkenalkan gagasan penggunaan robot kebersihan otomatis sebagai bagian dari konsep Smart City ramah lingkungan."
-    },
-    {
-      id: 4,
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop",
-      date: "February 25, 2024",
-      title: "Aplikasi Pelaporan Fasilitas Umum Berbasis AI",
-      desc: "Inovasi untuk memudahkan warga melaporkan jalan berlubang atau lampu mati hanya dengan memotret menggunakan AI."
-    }
+    
   ];
 
   const maxIndex = ideTerbaruData.length - 3;
@@ -240,73 +214,6 @@ function Home() {
           ))}
         </div>
       </section>
-
-      {/* ================= FOOTER ================= */}
-      <footer className="footer-section">
-        <div className="footer-bottom" style={{ borderTop: 'none', paddingTop: '0', justifyContent: 'center' }}>
-          <p>© 2026 Asanda. All rights reserved.</p>
-        </div>
-      </footer>
-
-      {/* ================= POPUP / MODAL PENAMBAHAN IDE ================= */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
-            <h2 className="modal-brand">KOLABORASA</h2>
-            
-            <div className="form-container-modal">
-              <div className="form-group">
-                <label>JUDUL</label>
-                <input 
-                  type="text" 
-                  value={formData.judul}
-                  onChange={(e) => setFormData({...formData, judul: e.target.value})}
-                  placeholder="Ketik judul ide..."
-                  disabled={submitting}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>GAMBAR</label>
-                <div className="upload-placeholder">
-                  <i className="fa-solid fa-cloud-arrow-up"></i>
-                  <span>Tekan Untuk Upload</span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>TEKS</label>
-                <textarea 
-                  rows="6"
-                  value={formData.teks}
-                  onChange={(e) => setFormData({...formData, teks: e.target.value})}
-                  placeholder="Deskripsikan ide cerdasmu secara detail..."
-                  disabled={submitting}
-                ></textarea>
-              </div>
-
-              {/* ACTION BUTTONS */}
-              <div className="modal-actions">
-                <button 
-                  className="btn-draft" 
-                  disabled={submitting}
-                  onClick={() => handleSubmit('Draft')}
-                >
-                  {submitting ? 'Memproses...' : 'Simpan Draft'}
-                </button>
-                <button 
-                  className="btn-publish" 
-                  disabled={submitting}
-                  onClick={() => handleSubmit('Menunggu')}
-                >
-                  {submitting ? 'Mengirim...' : 'Unggah'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

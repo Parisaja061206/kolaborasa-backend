@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import footer from './components/Footer';
 import './App.css';
 
 function Login() {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar'; // Pastikan komponen Navbar di-import agar header atas muncul
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import './App.css';
 
 function Profile() {
@@ -97,22 +98,7 @@ function Profile() {
 
   // Data Dummy untuk Tab Likes (Menunggu API 'Like' dari Backend)
   const likedPosts = [
-    {
-      id_ide: 101,
-      judul_ide: "Ide Smart Parking untuk Mengurangi Kemacetan",
-      deskripsi: "Dalam upaya mendukung pengembangan Smart City, masyarakat mencetuskan ide Smart Parking System yang terintegrasi secara digital.",
-      created_at: "2024-02-20T10:00:00Z",
-      status_progress: "Diproses",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop"
-    },
-    {
-      id_ide: 102,
-      judul_ide: "Robot Jadi Ide Inovatif untuk Mendukung Smart City",
-      deskripsi: "Memperkenalkan gagasan penggunaan robot kebersihan otomatis sebagai bagian dari konsep Smart City untuk kebersihan jalan.",
-      created_at: "2024-02-21T14:30:00Z",
-      status_progress: "Selesai",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop"
-    }
+    
   ];
 
   return (
@@ -288,14 +274,6 @@ function Profile() {
           
         </section>
       </main>
-      
-      {/* FOOTER */}
-      <footer className="footer-section">
-        <div className="footer-bottom" style={{ borderTop: 'none', paddingTop: '0', justifyContent: 'center' }}>
-          <p>© Copyright Kolaborasa 2026</p>
-        </div>
-      </footer>
-      
     </div>
   );
 }
