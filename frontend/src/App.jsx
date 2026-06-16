@@ -7,6 +7,10 @@ import Login from './Login'
 import Register from './Register'
 import Landing from './Landing'
 import Settings from './Settings'
+import IdeList from './pages/IdeList'
+import IdeForm from "./pages/IdeForm";
+import IdeDetail from "./pages/IdeDetail";
+import Komentar from "./pages/Komentar";
 
 function App() {
   return (
@@ -18,12 +22,15 @@ function App() {
         <Route path="/register" element={<Register />} />
         
         {/* Protected Routes inside Layout */}
-        <Route element={<Layout />}>
+        {/* <Route element={<Layout />}> */}
           <Route path="/home" element={<Home />} />
-          <Route path="/news" element={<News />} />
+          <Route path="/ide" element={<IdeList />} />
+          <Route path="/ide/tambah" element={<IdeForm />} />
+          <Route path="/ide/:id" element={<IdeDetail />} />
+          <Route path="/ide/:id/komentar" element={<Komentar />}/>
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </Router>
   )

@@ -1,0 +1,218 @@
+.ti-page {
+  min-height: 100vh;
+  background: #f3f4f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Hero */
+.ti-hero {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.ti-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ti-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 20, 40, 0.35), rgba(10, 20, 40, 0.05) 60%, transparent);
+}
+
+.ti-navbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 40px;
+}
+
+.ti-brand {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.ti-nav-links {
+  display: flex;
+  gap: 32px;
+}
+
+.ti-nav-links a {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  opacity: 0.92;
+}
+
+.ti-nav-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Card */
+.ti-card-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 60px;
+  margin-top: -80px;
+  position: relative;
+  z-index: 3;
+}
+
+.ti-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 700px;
+  padding: 36px 44px 32px;
+}
+
+.ti-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1f2937;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.ti-input {
+  width: 100%;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+.ti-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+.ti-textarea {
+  width: 100%;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  resize: none;
+  min-height: 150px;
+  font-family: inherit;
+}
+
+.ti-textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+.ti-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background 0.15s ease;
+}
+
+.ti-upload-btn:hover {
+  background: #c7e0fb;
+}
+
+.ti-upload-icon {
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.ti-preview-img {
+  display: block;
+  max-height: 160px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  object-fit: cover;
+}
+
+.ti-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin: 4px 0 12px;
+}
+
+.ti-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.ti-submit-btn {
+  background: #facc15;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 36px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(250, 204, 21, 0.4);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.ti-submit-btn:hover:not(:disabled) {
+  background: #eab308;
+}
+
+.ti-submit-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.ti-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .ti-navbar {
+    padding: 16px 20px;
+  }
+
+  .ti-nav-links {
+    gap: 18px;
+  }
+
+  .ti-card {
+    padding: 28px 24px 24px;
+  }
+
+  .ti-card-wrap {
+    margin-top: -60px;
+  }
+}

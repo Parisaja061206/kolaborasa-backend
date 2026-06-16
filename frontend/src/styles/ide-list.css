@@ -1,0 +1,176 @@
+.ide-page{
+    width:100%;
+    min-height:100vh;
+}
+
+/* HERO */
+
+.ide-hero{
+    height:350px;
+    background-image:url("https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b");
+    background-size:cover;
+    background-position:center;
+    position:relative;
+}
+
+.hero-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    text-align:center;
+}
+
+.hero-overlay h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.hero-overlay p{
+    font-size:18px;
+}
+
+/* INFO */
+
+.info-section{
+    margin-top:-40px;
+
+    display:flex;
+    justify-content:center;
+    gap:20px;
+
+    position:relative;
+    z-index:2;
+}
+
+.info-card{
+    background:white;
+    width:220px;
+
+    padding:20px;
+    border-radius:15px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.info-title{
+    color:gray;
+    display:block;
+    margin-bottom:10px;
+}
+
+.add-button{
+    width:80px;
+    height:80px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#f7b500;
+    color:white;
+
+    font-size:40px;
+    cursor:pointer;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+
+    transition:.3s;
+}
+
+.add-button:hover{
+    transform:scale(1.08);
+}
+
+/* HEADER */
+
+.section-header{
+    text-align:center;
+    margin-top:60px;
+}
+
+.section-header h2{
+    color:#1d2d6b;
+}
+
+/* GRID */
+
+.ide-grid{
+    max-width:1200px;
+    margin:40px auto;
+
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(300px,1fr));
+
+    gap:25px;
+}
+
+/* CARD */
+
+.ide-card{
+    background:white;
+
+    border-radius:20px;
+    overflow:hidden;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+
+    transition:.3s;
+}
+
+.ide-card:hover{
+    transform:translateY(-5px);
+}
+
+.image-wrapper img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+}
+
+.ide-content{
+    padding:20px;
+}
+
+.ide-content h3{
+    margin-bottom:15px;
+}
+
+.ide-content p{
+    color:#555;
+    line-height:1.5;
+}
+
+.ide-footer{
+    margin-top:20px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.ide-footer button{
+    border:none;
+    background:#1d2d6b;
+
+    color:white;
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.ide-footer button:hover{
+    opacity:.9;
+}
+
+.ide-card{
+    cursor:pointer;
+}
