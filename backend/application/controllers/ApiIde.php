@@ -57,6 +57,7 @@ class ApiIde extends CI_Controller
             'judul' => $this->input->post('judul'),
             'isi' => $this->input->post('isi'),
             'lokasi' => $this->input->post('lokasi'),
+            'status' => $this->input->post('status') ? $this->input->post('status') : 'publish',
             'gambar' => $gambar
         ];
 

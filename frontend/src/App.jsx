@@ -6,6 +6,7 @@ import Profile from './Profile'
 import Login from './Login'
 import Register from './Register'
 import Landing from './Landing'
+import Settings from './Settings'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/news" element={<News />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>

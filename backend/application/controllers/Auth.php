@@ -87,4 +87,86 @@ class Auth extends CI_Controller {
 
         return $this->apiResponse(['status' => 'gagal', 'pesan' => 'Email dan Password wajib diisi!'], 400);
     }
+
+    // ---------------------------------------------------------
+    // 3. ENDPOINT POST: Update Profil
+    // ---------------------------------------------------------
+    public function updateProfile() {
+        $is_multipart = strpos($_SERVER['CONTENT_TYPE'] ?? '', 'multipart/form-data') !== false;
+
+        if ($is_multipart) {
+            $id_user = $this->input->post('id_user');
+            $email = trim($this->input->post('email') ?? '');
+            $nama = trim($this->input->post('nama') ?? '');
+            $password = trim($this->input->post('password') ?? '');
+        } else {
+            $input = $this->getJsonInput();
+            $id_user = $input['id_user'] ?? '';
+            $email = trim($input['email'] ?? '');
+            $nama = trim($input['nama'] ?? '');
+            $password = trim($input['password'] ?? '');
+        }
+
+        if ($id_user !== '' && $email !== '' && $nama !== '') {
+            // Cek apakah email sudah dipakai user lain
+            $cek_email = $this->db->get_where('user', ['email' => $email, 'id_user !=' => $id_user])->num_rows();
+            if ($cek_email > 0) {
+                return $this->apiResponse(['status' => 'gagal', 'pesan' => 'Email sudah digunakan oleh akun lain!'], 409);
+            }
+
+            $update_data = [
+                'nama' => $nama,
+                'email' => $email
+            ];
+
+            if ($password !== '') {
+                $update_data['password'] = password_hash($password, PASSWORD_BCRYPT);
+            }
+
+            // Handle upload foto profil
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $upload_path = FCPATH . 'uploads/profil/';
+                if (!is_dir($upload_path)) {
+                    mkdir($upload_path, 0777, true);
+                }
+
+                $config['upload_path']   = $upload_path;
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size']      = 5120; // 5MB
+                $config['file_name']     = 'profil_' . $id_user . '_' . time();
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('foto')) {
+                    $upload_data = $this->upload->data();
+                    $update_data['foto'] = $upload_data['file_name'];
+                    
+                    // Ambil foto lama untuk dihapus
+                    $old_user = $this->db->get_where('user', ['id_user' => $id_user])->row_array();
+                    if ($old_user && !empty($old_user['foto']) && file_exists($upload_path . $old_user['foto'])) {
+                        @unlink($upload_path . $old_user['foto']);
+                    }
+                } else {
+                    return $this->apiResponse(['status' => 'gagal', 'pesan' => $this->upload->display_errors('', '')], 400);
+                }
+            }
+
+            $this->db->where('id_user', $id_user);
+            $this->db->update('user', $update_data);
+
+            // Ambil data terbaru untuk di-return
+            $user = $this->db->get_where('user', ['id_user' => $id_user])->row_array();
+            if ($user) {
+                unset($user['password']);
+                return $this->apiResponse([
+                    'status' => 'sukses',
+                    'pesan' => 'Profil berhasil diperbarui!',
+                    'user' => $user
+                ]);
+            }
+        }
+
+        return $this->apiResponse(['status' => 'gagal', 'pesan' => 'ID, Nama, dan Email wajib diisi!'], 400);
+    }
 }
+

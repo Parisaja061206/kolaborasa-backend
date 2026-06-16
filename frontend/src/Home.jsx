@@ -23,13 +23,13 @@ function Home() {
   const fetchUserStats = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`${API_URL}/Aspirasi/user_stats/${user.id_user}`);
+      const response = await fetch(`${API_URL}/ApiIde`);
       const result = await response.json();
-      if (result.status === 'sukses') {
-        setStats({
-          totalIde: result.data.total_ide,
-          draftIde: result.data.draft_ide
-        });
+      if (result.status === true) {
+        const myIdeas = result.data.filter(item => String(item.id_user) === String(user.id_user));
+        const totalIde = myIdeas.length;
+        const draftIde = myIdeas.filter(item => item.status && item.status.toLowerCase() === 'draft').length;
+        setStats({ totalIde, draftIde });
       }
     } catch (err) {
       console.error("Gagal mengambil statistik pengguna:", err);
@@ -49,25 +49,26 @@ function Home() {
 
     setSubmitting(true);
     try {
-      const response = await fetch(`${API_URL}/Aspirasi/tambah`, {
+      const formPayload = new FormData();
+      formPayload.append('id_user', user.id_user);
+      formPayload.append('judul', formData.judul);
+      formPayload.append('isi', formData.teks);
+      formPayload.append('lokasi', user.lokasi || 'Bandung, Indonesia');
+      formPayload.append('status', status.toLowerCase()); // 'draft' atau 'publish'
+
+      const response = await fetch(`${API_URL}/ApiIde/tambah`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_user: user.id_user,
-          judul_ide: formData.judul,
-          deskripsi: formData.teks,
-          status_progress: status // Akan berisi 'Draft' atau 'Menunggu'
-        })
+        body: formPayload
       });
 
       const result = await response.json();
-      if (result.status === 'sukses') {
+      if (result.status === true) {
         alert(status === 'Draft' ? "Ide berhasil disimpan ke Draft!" : "Ide Berhasil diunggah!");
         setIsModalOpen(false); // Tutup modal
         setFormData({ judul: '', teks: '' }); // Kosongkan form
         fetchUserStats(); // Refresh angka statistik di dashboard tanpa perlu reload halaman
       } else {
-        alert(result.pesan || "Terjadi kesalahan saat menyimpan.");
+        alert(result.message || "Terjadi kesalahan saat menyimpan.");
       }
     } catch (err) {
       alert("Terjadi kesalahan sistem: " + err.message);

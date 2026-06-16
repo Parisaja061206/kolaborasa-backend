@@ -13,14 +13,14 @@ function News() {
   const fetchAspirasi = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/Aspirasi`);
+      const response = await fetch(`${API_URL}/ApiIde`);
       if (!response.ok) throw new Error('Network response was not ok');
       
       const result = await response.json();
-      if (result.status === 'sukses') {
+      if (result.status === true) {
         setAspirasi(result.data);
       } else {
-        throw new Error(result.pesan || 'Gagal mengambil data');
+        throw new Error(result.message || 'Gagal mengambil data');
       }
     } catch (err) {
       setError(err.message);
@@ -72,7 +72,7 @@ function News() {
         <div className="ide-grid">
           {!loading && !error && aspirasi.map((item, index) => {
             // Menentukan warna badge berdasarkan status
-            const statusLokal = item.status_progress ? item.status_progress.toLowerCase() : 'menunggu';
+            const statusLokal = item.status ? item.status.toLowerCase() : 'publish';
             
             // Gambar placeholder berulang agar desain tidak kosong (opsional)
             const placeholderImages = [
@@ -80,12 +80,12 @@ function News() {
               "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
               "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop"
             ];
-            const imgSrc = placeholderImages[index % 3];
+            const imgSrc = item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : placeholderImages[index % 3];
 
             return (
               <div key={item.id_ide || index} className="ide-card">
                 {/* Gambar Thumbnail */}
-                <img src={imgSrc} alt="Ilustrasi Ide" />
+                <img src={imgSrc} alt={item.judul || "Ilustrasi Ide"} />
                 
                 <div className="ide-card-body">
                   {/* Bagian Meta Atas (Tanggal & Badge) */}
@@ -95,13 +95,13 @@ function News() {
                       {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Tanggal tidak tersedia'}
                     </span>
                     <span className={`status-badge ${statusLokal}`}>
-                      {item.status_progress || 'Menunggu'}
+                      {item.status || 'Publish'}
                     </span>
                   </div>
 
                   {/* Konten Utama */}
-                  <h4>{item.judul_ide}</h4>
-                  <p>{item.deskripsi}</p>
+                  <h4>{item.judul}</h4>
+                  <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
                   
                   {/* Bagian Meta Bawah (Author & Votes) */}
                   <div className="card-meta-bottom">
@@ -111,9 +111,6 @@ function News() {
                     <div className="votes">
                       <span className="vote-item like">
                         <i className="fa-regular fa-thumbs-up"></i> {item.jumlah_like || 0}
-                      </span>
-                      <span className="vote-item dislike">
-                        <i className="fa-regular fa-thumbs-down"></i> {item.jumlah_dislike || 0}
                       </span>
                     </div>
                   </div>

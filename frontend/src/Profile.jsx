@@ -18,6 +18,16 @@ function Profile() {
   const [error, setError] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php';
+  const BASE_URL = API_URL.replace('/backend/index.php', '');
+
+  // Fungsi untuk mendapatkan URL avatar yang benar
+  const getProfileImageUrl = () => {
+    if (user?.foto) {
+      if (user.foto.startsWith('http')) return user.foto;
+      return `${BASE_URL}/backend/uploads/profil/${user.foto}`;
+    }
+    return `https://ui-avatars.com/api/?name=${user?.nama || 'User'}&background=random&size=150`;
+  };
 
   // 3. FUNGSI NAVIGASI INTERAKTIF
   const handleLogout = () => {
@@ -33,20 +43,29 @@ function Profile() {
   useEffect(() => {
     const fetchAspirasiKu = async () => {
       if (!user) return;
+      
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/Aspirasi`);
-        if (!response.ok) throw new Error('Network response was not ok');
+        
+        // PERBAIKAN 1: Sesuaikan endpoint routing CodeIgniter (biasanya tanpa .php di akhir controller)
+        // Pastikan apakah URL-nya /ApiIde, /apiide, atau /index.php/ApiIde tergantung setup .htaccess kamu
+        const response = await fetch(`${API_URL}/ApiIde`); 
+        
+        if (!response.ok) throw new Error('Gagal terhubung ke server');
         
         const result = await response.json();
-        if (result.status === 'sukses') {
-          // Menyaring agar hanya ide milik user yang login yang masuk
+        
+        // PERBAIKAN 2: Backend mengirimkan boolean `true`, bukan string 'sukses'
+        if (result.status === true) { 
+          
           const myIdeas = result.data.filter(item => String(item.id_user) === String(user.id_user));
-          // Urutkan dari yang terbaru
+          
+          // PERBAIKAN 3: Pastikan field tanggal dari database sesuai (asumsi 'created_at')
           myIdeas.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           setAspirasiKu(myIdeas);
+          
         } else {
-          throw new Error(result.pesan || 'Gagal mengambil data');
+          throw new Error(result.message || 'Gagal mengambil data dari server');
         }
       } catch (err) {
         setError(err.message);
@@ -54,8 +73,9 @@ function Profile() {
         setLoading(false);
       }
     };
+
     fetchAspirasiKu();
-  }, [user, API_URL]);
+  }, [user?.id_user, API_URL]);
 
   // Jika user belum login, tampilkan layar loading
   if (!user) {
@@ -70,12 +90,12 @@ function Profile() {
   // 5. LOGIKA FILTER & KALKULASI DATA
   // Ide yang masih draf (belum dipublikasi)
   const draftIdeas = aspirasiKu.filter(item => 
-    item.status_progress && item.status_progress.toLowerCase() === 'draft'
+    item.status && item.status.toLowerCase() === 'draft'
   );
   
   // Ide yang sudah dipublikasi ke publik
   const publishedIdeas = aspirasiKu.filter(item => 
-    !item.status_progress || item.status_progress.toLowerCase() !== 'draft'
+    !item.status || item.status.toLowerCase() !== 'draft'
   );
 
   // Kalkulasi Total Likes HANYA dari ide yang sudah dipublikasi
@@ -114,7 +134,7 @@ function Profile() {
         
         {/* SIDEBAR NAVIGASI KIRI */}
         <aside className="profile-sidebar">
-          <button className="sidebar-icon active" onClick={handleToHome} title="Tambah Ide Baru">
+          <button className="sidebar-icon" onClick={handleToHome} title="Tambah Ide Baru">
             <i className="fa-solid fa-square-plus"></i>
           </button>
           <button className="sidebar-icon" onClick={handleToMessages} title="Pesan / Chat">
@@ -123,7 +143,8 @@ function Profile() {
           <button className="sidebar-icon" onClick={handleToSettings} title="Pengaturan Biodata">
             <i className="fa-solid fa-gear"></i>
           </button>
-          <button className="sidebar-icon user-icon" title="Profil Saya">
+          {/* Class 'active' dipindahkan ke ikon profil */}
+          <button className="sidebar-icon user-icon active" title="Profil Saya">
             <i className="fa-solid fa-circle-user"></i>
           </button>
         </aside>
@@ -135,7 +156,7 @@ function Profile() {
             {/* Avatar */}
             <div className="profile-avatar-container">
               <img 
-                src={user.foto || `https://ui-avatars.com/api/?name=${user.nama}&background=random&size=150`} 
+                src={getProfileImageUrl()} 
                 alt="Avatar" 
                 className="profile-avatar-img"
               />
@@ -143,7 +164,6 @@ function Profile() {
 
             {/* Identitas */}
             <h3 className="profile-name">{user.nama}</h3>
-            <p className="profile-role">Mahasiswa</p>
             <p className="profile-location">
               <i className="fa-solid fa-location-dot"></i> Bandung, Indonesia
             </p>
@@ -215,14 +235,14 @@ function Profile() {
               ) : draftIdeas.length > 0 ? (
                 draftIdeas.map((item, index) => (
                   <div key={item.id_ide || index} className="profile-post-card">
-                    <img src={placeholderImages[index % 3]} alt={item.judul_ide} />
+                    <img src={item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : placeholderImages[index % 3]} alt={item.judul} />
                     <div className="profile-post-body">
                       <span className="post-date">
                         <i className="fa-regular fa-calendar"></i> 
                         {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
                       </span>
-                      <h4>{item.judul_ide}</h4>
-                      <p>{item.deskripsi.length > 100 ? `${item.deskripsi.substring(0, 100)}...` : item.deskripsi}</p>
+                      <h4>{item.judul}</h4>
+                      <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
                       
                       {/* Badge DRAFT di pojok bawah */}
                       <span className="status-badge" style={{ backgroundColor: '#e2e3e5', color: '#383d41' }}>
@@ -244,18 +264,18 @@ function Profile() {
               likedPosts.length > 0 ? (
                 likedPosts.map((item, index) => (
                   <div key={item.id_ide || index} className="profile-post-card">
-                    <img src={item.image} alt={item.judul_ide} />
+                    <img src={item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : item.image || placeholderImages[index % 3]} alt={item.judul} />
                     <div className="profile-post-body">
                       <span className="post-date">
                         <i className="fa-regular fa-calendar"></i> 
-                        {new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
                       </span>
-                      <h4>{item.judul_ide}</h4>
-                      <p>{item.deskripsi.length > 100 ? `${item.deskripsi.substring(0, 100)}...` : item.deskripsi}</p>
+                      <h4>{item.judul}</h4>
+                      <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
                       
                       <div className="card-meta-bottom" style={{ borderTop: 'none', paddingTop: '0' }}>
-                        <span className={`status-badge ${item.status_progress.toLowerCase()}`}>
-                          {item.status_progress}
+                        <span className={`status-badge ${item.status ? item.status.toLowerCase() : ''}`}>
+                          {item.status}
                         </span>
                         <i className="fa-solid fa-heart" style={{ color: '#EA4335', fontSize: '18px' }}></i>
                       </div>

@@ -1,117 +1,106 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import './App.css'
-import Footer from './components/Footer'
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import footer from './components/Footer';
+import './App.css';
 
 function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
     nama: '',
+    email: '',
     password: '',
-    confirm_password: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const navigate = useNavigate()
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php';
+    tanggalLahir: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
-    setError(null)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     
-    if (formData.password !== formData.confirm_password) {
-      setError('Password dan Konfirmasi Password tidak cocok!')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const response = await fetch(`${API_URL}/Auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-
-      const result = await response.json()
-      if (result.status === 'sukses') {
-        alert('Registrasi berhasil! Silakan login.')
-        navigate('/login')
-      } else {
-        setError(result.pesan || 'Registrasi gagal!')
-      }
-    } catch (err) {
-      setError('Terjadi kesalahan: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+    // Simulasi proses register (Bisa diganti dengan API Fetch ke backend Anda)
+    setTimeout(() => {
+      alert("Akun berhasil dibuat! Silakan login.");
+      setIsLoading(false);
+      navigate('/login');
+    }, 1500);
+  };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Daftar Akun Baru</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleRegister}>
-          <div className="form-group">
-            <label>Email:</label>
-            <input 
-              type="email" 
-              name="email"
-              value={formData.email} 
-              onChange={handleChange}
-              placeholder="Masukkan Email Anda"
-              required 
-            />
+    <div className="landing-page-container">
+      
+      {/* AREA BACKGROUND & FORM */}
+      <section className="register-hero-bg">
+        <div className="glass-panel register-panel">
+          
+          <h1 className="glass-title-register">
+            SELAMAT DATANG DI<br/>KOLABORASA
+          </h1>
+          <hr className="glass-divider-register" />
+          
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group-glass">
+              <label>NAMA</label>
+              <input 
+                type="text" 
+                name="nama" 
+                value={formData.nama}
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            
+            <div className="form-group-glass">
+              <label>EMAIL</label>
+              <input 
+                type="email" 
+                name="email" 
+                value={formData.email}
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="form-group-glass">
+              <label>PASSWORD</label>
+              <input 
+                type="password" 
+                name="password" 
+                value={formData.password}
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="form-group-glass">
+              <label>HARI/TANGGAL LAHIR</label>
+              <input 
+                type="date" 
+                name="tanggalLahir" 
+                value={formData.tanggalLahir}
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="register-btn-wrapper">
+              <button type="submit" className="btn-mulai btn-buat-akun" disabled={isLoading}>
+                {isLoading ? 'MEMPROSES...' : 'BUAT AKUN'}
+              </button>
+            </div>
+          </form>
+
+          <div className="auth-link-text">
+            Sudah memiliki Akun? <Link to="/login">Masuk</Link>
           </div>
-          <div className="form-group">
-            <label>Nama Lengkap:</label>
-            <input 
-              type="text" 
-              name="nama"
-              value={formData.nama} 
-              onChange={handleChange}
-              placeholder="Nama Anda"
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Password:</label>
-            <input 
-              type="password" 
-              name="password"
-              value={formData.password} 
-              onChange={handleChange}
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Konfirmasi Password:</label>
-            <input 
-              type="password" 
-              name="confirm_password"
-              value={formData.confirm_password} 
-              onChange={handleChange}
-              required 
-            />
-          </div>
-          <button type="submit" disabled={loading} className="submit-btn auth-btn">
-            {loading ? 'Proses...' : 'Daftar'}
-          </button>
-        </form>
-        <p className="auth-footer">
-          Sudah punya akun? <Link to="/login">Masuk di sini</Link>
-        </p>
-      </div>
+
+        </div>
+      </section>
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;
