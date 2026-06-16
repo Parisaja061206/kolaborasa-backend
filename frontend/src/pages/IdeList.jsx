@@ -9,7 +9,7 @@ function IdeList() {
 
   const API_URL =
     import.meta.env.VITE_API_URL ||
-    "http://localhost/Kolaborasa_Webpro/kolaborasa-backend/backend/index.php";
+    "http://localhost/kolaborasa-backend/backend/index.php";
 
   const [ideList, setIdeList] = useState([]);
   const [loading, setLoading] = useState(true);

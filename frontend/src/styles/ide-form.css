@@ -1,96 +1,233 @@
-.form-page{
-    min-height:100vh;
-
-    background:#f5f7fb;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:40px 20px;
+.form-page {
+  min-height: 100vh;
+  background: #f3f4f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-.form-container{
-    width:100%;
-    max-width:850px;
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:40px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.1);
+/* ===== Hero banner (foto kota + navbar transparan di atasnya) ===== */
+.hero-banner {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
 }
 
-.form-container h1{
-    text-align:center;
-    color:#1d2d6b;
-    margin-bottom:10px;
+.hero-banner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.form-container p{
-    text-align:center;
-    color:#666;
-    margin-bottom:30px;
+.hero-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 20, 40, 0.35), rgba(10, 20, 40, 0.05) 60%, transparent);
 }
 
-.form-group{
-    margin-bottom:25px;
+/* override tampilan default .navbar (dari App.css) saat dia duduk di atas foto */
+.hero-banner .navbar {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  box-shadow: none;
 }
 
-.form-group label{
-    display:block;
-    margin-bottom:10px;
-    font-weight:600;
+.hero-banner .nav-brand {
+  color: #ffffff;
 }
 
-.form-group input,
-.form-group textarea{
-    width:100%;
-
-    padding:14px;
-
-    border:1px solid #ddd;
-    border-radius:10px;
-
-    font-size:15px;
+.hero-banner .nav-links a {
+  color: #ffffff;
+  opacity: 0.92;
 }
 
-.form-group textarea{
-    resize:none;
+.hero-banner .nav-links a:hover,
+.hero-banner .nav-links a.active {
+  opacity: 1;
 }
 
-.button-group{
-    display:flex;
-    justify-content:flex-end;
-    gap:15px;
+.form-container {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 700px;
+  margin: -80px auto 60px;
+  padding: 36px 44px 32px;
+  position: relative;
+  z-index: 3;
 }
 
-.btn-cancel{
-    background:#ddd;
-    border:none;
-
-    padding:12px 20px;
-    border-radius:10px;
-
-    cursor:pointer;
+.form-container h1 {
+  text-align: center;
+  color: #1d2d6b;
+  margin-bottom: 10px;
 }
 
-.btn-submit{
-    background:#f7b500;
-    color:white;
-
-    border:none;
-
-    padding:12px 25px;
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:600;
+.form-container p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
 }
 
-.btn-submit:hover{
-    opacity:.9;
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1f2937;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+.form-group textarea {
+  width: 100%;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+  box-sizing: border-box;
+  resize: none;
+  min-height: 150px;
+  font-family: inherit;
+}
+
+.form-group textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+/* ===== Custom file upload (menggantikan input file bawaan) ===== */
+.upload-input {
+  display: none;
+}
+
+.upload-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #dbeafe;
+  border: 1px solid #c3ddf7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.upload-box:hover {
+  background: #c7e0fb;
+}
+
+.upload-box:focus-within {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+.upload-box svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #2563eb;
+}
+
+.upload-box .file-name {
+  color: #374151;
+}
+
+.upload-preview {
+  display: block;
+  max-height: 160px;
+  border-radius: 8px;
+  margin-top: 12px;
+  object-fit: cover;
+}
+
+.form-error {
+  font-size: 13px;
+  color: #dc2626;
+  margin: 4px 0 0;
+}
+
+/* ===== Tombol ===== */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: none;
+  color: #555;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancel:hover {
+  color: #1a1a1a;
+}
+
+.btn-submit {
+  background: #facc15;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 36px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(250, 204, 21, 0.4);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #eab308;
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .form-container {
+    margin-top: -60px;
+    padding: 28px 24px 24px;
+  }
 }
