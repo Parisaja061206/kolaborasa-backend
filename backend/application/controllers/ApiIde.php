@@ -33,6 +33,16 @@ class ApiIde extends CI_Controller
         ]);
     }
 
+    public function user($id_user)
+    {
+        $data = $this->Ide_model->getByUser($id_user);
+
+        echo json_encode([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
+
     public function tambah()
     {
         $gambar = '';
@@ -79,12 +89,60 @@ class ApiIde extends CI_Controller
         ]);
     }
 
+    public function update($id)
+    {
+        $ide = $this->Ide_model->getById($id);
+        $gambar = $ide->gambar;
+
+        if(isset($_FILES['gambar']))
+        {
+            $config['upload_path'] = './uploads/ide/';
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['encrypt_name'] = TRUE;
+
+            $this->load->library('upload',$config);
+
+            if($this->upload->do_upload('gambar'))
+            {
+                // Hapus gambar lama jika ada
+                if($ide->gambar && file_exists('./uploads/ide/'.$ide->gambar)){
+                    unlink('./uploads/ide/'.$ide->gambar);
+                }
+                $gambar = $this->upload->data('file_name');
+            }
+        }
+
+        $data = [
+            'judul' => $this->input->post('judul'),
+            'isi' => $this->input->post('isi'),
+            'lokasi' => $this->input->post('lokasi'),
+            'status' => $this->input->post('status') ? $this->input->post('status') : $ide->status
+        ];
+
+        if(isset($_FILES['gambar'])){
+            $data['gambar'] = $gambar;
+        }
+
+        $this->Ide_model->update($id, $data);
+
+        echo json_encode([
+            'status'=>true,
+            'message'=>'Ide berhasil diperbarui'
+        ]);
+    }
+
     public function hapus($id)
     {
+        $ide = $this->Ide_model->getById($id);
+        if($ide->gambar && file_exists('./uploads/ide/'.$ide->gambar)){
+            unlink('./uploads/ide/'.$ide->gambar);
+        }
+        
         $this->Ide_model->delete($id);
 
         echo json_encode([
-            'status'=>true
+            'status'=>true,
+            'message'=>'Ide berhasil dihapus'
         ]);
     }
     public function statistik()

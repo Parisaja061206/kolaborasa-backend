@@ -26,6 +26,15 @@ class Ide_model extends CI_Model
             ->row();
     }
 
+    public function getByUser($id_user)
+    {
+        return $this->db
+            ->where('id_user', $id_user)
+            ->order_by('created_at', 'DESC')
+            ->get($this->table)
+            ->result();
+    }
+
     public function insert($data)
     {
         return $this->db->insert($this->table,$data);

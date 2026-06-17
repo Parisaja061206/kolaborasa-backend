@@ -66,7 +66,7 @@ function IdeList() {
       {/* HERO */}
       <section className="ide-hero">
         <div className="hero-overlay">
-          <h1>Forum Ide Masyarakat</h1>
+          <h1 style={{ color: "white" }}>Forum Ide Masyarakat</h1>
           <p>
             Bagikan ide terbaikmu untuk membangun kota yang lebih baik.
           </p>

@@ -21,12 +21,36 @@ function Register() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulasi proses register (Bisa diganti dengan API Fetch ke backend Anda)
-    setTimeout(() => {
-      alert("Akun berhasil dibuat! Silakan login.");
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php';
+      
+      const response = await fetch(`${API_URL}/Auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nama: formData.nama,
+          email: formData.email,
+          password: formData.password,
+          tanggalLahir: formData.tanggalLahir
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.status === 'sukses') {
+        alert("Akun berhasil dibuat! Silakan login.");
+        navigate('/login');
+      } else {
+        alert(result.pesan || "Registrasi gagal!");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("Terjadi kesalahan sistem. Pastikan backend berjalan.");
+    } finally {
       setIsLoading(false);
-      navigate('/login');
-    }, 1500);
+    }
   };
 
   return (
