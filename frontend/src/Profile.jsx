@@ -12,7 +12,7 @@ function Profile() {
   const user = userStr ? JSON.parse(userStr) : null;
   
   // 2. STATE MANAJEMEN
-  const [activeTab, setActiveTab] = useState('Unggahan'); // Default tab
+  const [activeTab, setActiveTab] = useState('Unggahan'); 
   const [aspirasiKu, setAspirasiKu] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,6 @@ function Profile() {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost/kolaborasa-backend/backend/index.php';
   const BASE_URL = API_URL.replace('/backend/index.php', '');
 
-  // Fungsi untuk mendapatkan URL avatar yang benar
   const getProfileImageUrl = () => {
     if (user?.foto) {
       if (user.foto.startsWith('http')) return user.foto;
@@ -35,9 +34,9 @@ function Profile() {
     navigate('/login');
   };
 
-  const handleToMessages = () => navigate('/messages'); // Arahkan ke Room Chat
-  const handleToSettings = () => navigate('/settings'); // Arahkan ke Edit Profil
-  const handleToHome = () => navigate('/home'); // Tambahan navigasi ke Beranda/Form
+  const handleToMessages = () => navigate('/messages'); 
+  const handleToSettings = () => navigate('/settings'); 
+  const handleToHome = () => navigate('/home'); 
 
   // 4. FETCHING DATA DARI BACKEND
   useEffect(() => {
@@ -46,24 +45,16 @@ function Profile() {
       
       try {
         setLoading(true);
-        
-        // PERBAIKAN 1: Sesuaikan endpoint routing CodeIgniter (biasanya tanpa .php di akhir controller)
-        // Pastikan apakah URL-nya /ApiIde, /apiide, atau /index.php/ApiIde tergantung setup .htaccess kamu
         const response = await fetch(`${API_URL}/ApiIde`); 
         
         if (!response.ok) throw new Error('Gagal terhubung ke server');
         
         const result = await response.json();
         
-        // PERBAIKAN 2: Backend mengirimkan boolean `true`, bukan string 'sukses'
         if (result.status === true) { 
-          
           const myIdeas = result.data.filter(item => String(item.id_user) === String(user.id_user));
-          
-          // PERBAIKAN 3: Pastikan field tanggal dari database sesuai (asumsi 'created_at')
           myIdeas.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           setAspirasiKu(myIdeas);
-          
         } else {
           throw new Error(result.message || 'Gagal mengambil data dari server');
         }
@@ -77,7 +68,6 @@ function Profile() {
     fetchAspirasiKu();
   }, [user?.id_user, API_URL]);
 
-  // Jika user belum login, tampilkan layar loading
   if (!user) {
     return (
       <div className="status-container" style={{ height: '100vh', backgroundColor: 'var(--bg-light)' }}>
@@ -88,38 +78,23 @@ function Profile() {
   }
 
   // 5. LOGIKA FILTER & KALKULASI DATA
-  // Ide yang masih draf (belum dipublikasi)
-  const draftIdeas = aspirasiKu.filter(item => 
-    item.status && item.status.toLowerCase() === 'draft'
-  );
-  
-  // Ide yang sudah dipublikasi ke publik
-  const publishedIdeas = aspirasiKu.filter(item => 
-    !item.status || item.status.toLowerCase() !== 'draft'
-  );
+  const draftIdeas = aspirasiKu.filter(item => item.status && item.status.toLowerCase() === 'draft');
+  const publishedIdeas = aspirasiKu.filter(item => !item.status || item.status.toLowerCase() !== 'draft');
 
-  // Kalkulasi Total Likes HANYA dari ide yang sudah dipublikasi
-  const totalLikes = publishedIdeas.reduce((sum, item) => {
-    return sum + (parseInt(item.jumlah_like) || 0);
-  }, 0);
+  const totalLikes = publishedIdeas.reduce((sum, item) => sum + (parseInt(item.jumlah_like) || 0), 0);
 
-  // Format angka agar lebih rapi (misal: 1200 -> 1.2K)
   const formatNumber = (num) => {
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num;
   };
 
-  // Gambar Placeholder untuk Draft
   const placeholderImages = [
     "https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=600&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop"
   ];
 
-  // Data Dummy untuk Tab Likes (Menunggu API 'Like' dari Backend)
-  const likedPosts = [
-    
-  ];
+  const likedPosts = [];
 
   return (
     <div className="profile-page-wrapper" style={{ backgroundColor: 'var(--bg-light)', minHeight: '100vh' }}>
@@ -143,7 +118,6 @@ function Profile() {
           <button className="sidebar-icon" onClick={handleToSettings} title="Pengaturan Biodata">
             <i className="fa-solid fa-gear"></i>
           </button>
-          {/* Class 'active' dipindahkan ke ikon profil */}
           <button className="sidebar-icon user-icon active" title="Profil Saya">
             <i className="fa-solid fa-circle-user"></i>
           </button>
@@ -152,8 +126,6 @@ function Profile() {
         {/* PROFIL CARD TENGAH (BIODATA & STATISTIK) */}
         <section className="profile-card-wrapper">
           <div className="profile-main-card">
-            
-            {/* Avatar */}
             <div className="profile-avatar-container">
               <img 
                 src={getProfileImageUrl()} 
@@ -162,13 +134,11 @@ function Profile() {
               />
             </div>
 
-            {/* Identitas */}
             <h3 className="profile-name">{user.nama}</h3>
             <p className="profile-location">
               <i className="fa-solid fa-location-dot"></i> Bandung, Indonesia
             </p>
 
-            {/* Statistik Dinamis */}
             <div className="profile-stats">
               <div className="stat-box">
                 <h4>{loading ? '...' : formatNumber(publishedIdeas.length)}</h4>
@@ -184,24 +154,19 @@ function Profile() {
               </div>
             </div>
 
-            {/* Tombol Logout */}
             <button onClick={handleLogout} className="btn-logout-profile">
               <i className="fa-solid fa-right-from-bracket"></i> Logout
             </button>
 
-            {/* Dekorasi Visual */}
             <div className="profile-card-decoration">
               <div className="decor-yellow"></div>
               <div className="decor-blue"></div>
             </div>
-
           </div>
         </section>
 
         {/* KONTEN AREA KANAN (TABS & POSTINGAN) */}
         <section className="profile-content-area">
-          
-          {/* Navigasi Tab */}
           <div className="profile-tabs">
             <button 
               className={activeTab === 'Unggahan' ? 'active' : ''} 
@@ -217,12 +182,8 @@ function Profile() {
             </button>
           </div>
 
-          {/* Grid Postingan Dinamis */}
           <div className="profile-post-grid">
-            
             {activeTab === 'Unggahan' ? (
-              
-              // ================= TAB UNGGAHAN =================
               loading ? (
                 <div className="status-container" style={{ gridColumn: 'span 2' }}>
                   <i className="fa-solid fa-spinner fa-spin fa-2x"></i>
@@ -244,7 +205,6 @@ function Profile() {
                       <h4>{item.judul}</h4>
                       <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
                       
-                      {/* Status PUBLISH */}
                       <span className="status-badge" style={{ backgroundColor: '#cce5ff', color: '#004085' }}>
                         PUBLISH
                       </span>
@@ -257,10 +217,7 @@ function Profile() {
                   <p>Anda belum memiliki ide yang dipublikasikan.</p>
                 </div>
               )
-              
             ) : (
-              
-              // ================= TAB LIKES =================
               likedPosts.length > 0 ? (
                 likedPosts.map((item, index) => (
                   <div key={item.id_ide || index} className="profile-post-card">
@@ -288,12 +245,13 @@ function Profile() {
                   <p>Belum ada postingan yang disukai.</p>
                 </div>
               )
-              
             )}
           </div>
-          
         </section>
       </main>
+
+      {/* ================= FOOTER SECTION ================= */}
+      <Footer />
     </div>
   );
 }

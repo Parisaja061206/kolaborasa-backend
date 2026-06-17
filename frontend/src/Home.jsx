@@ -35,8 +35,6 @@ function Home() {
       const response = await fetch(`${API_URL}/ApiIde`);
       const result = await response.json();
       if (result.status === true) {
-        // Ambil 3 ide terbaru yang statusnya 'publish' (asumsi data terbaru ada di awal atau perlu di-sort)
-        // Kita sort berdasarkan id_ide desc untuk mendapatkan yang terbaru
         const latestIdeas = result.data
           .filter(item => item.status && item.status.toLowerCase() === 'publish')
           .sort((a, b) => b.id_ide - a.id_ide)
@@ -54,7 +52,6 @@ function Home() {
     fetchIdeTerbaru();
   }, [user, API_URL]);
 
-  // Fungsi saat tombol tambah (+) ditekan
   const handleAddIdea = () => {
     if (!user) {
       alert("Anda harus login terlebih dahulu!");
@@ -88,10 +85,7 @@ function Home() {
             <p>Bagikan ide mu untuk memajukan kota mu</p>
           </div>
           
-          {/* AREA SUMMARY DASHBOARD */}
           <div className="hero-search-bar">
-            
-            {/* 1. Menampilkan Lokasi Pengguna */}
             <div className="search-item">
               <i className="fa-solid fa-location-dot search-icon"></i>
               <div className="search-text">
@@ -100,7 +94,6 @@ function Home() {
               </div>
             </div>
             
-            {/* 2. Menampilkan Total Ide */}
             <div className="search-item no-border">
               <i className="fa-regular fa-lightbulb search-icon"></i>
               <div className="search-text">
@@ -109,11 +102,9 @@ function Home() {
               </div>
             </div>
             
-            {/* 3. Tombol Ikon Tambah (+) */}
             <button className="btn-search-circle" onClick={handleAddIdea} title="Buat Ide Baru">
               <i className="fa-solid fa-plus"></i>
             </button>
-            
           </div>
         </div>
       </section>
@@ -147,6 +138,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* ================= FOOTER SECTION ================= */}
+      <Footer />
     </>
   );
 }
