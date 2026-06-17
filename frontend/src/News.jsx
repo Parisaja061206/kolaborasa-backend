@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
 
 function News() {
+  const navigate = useNavigate();
   const [aspirasi, setAspirasi] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -83,38 +85,22 @@ function News() {
             const imgSrc = item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : placeholderImages[index % 3];
 
             return (
-              <div key={item.id_ide || index} className="ide-card">
-                {/* Gambar Thumbnail */}
-                <img src={imgSrc} alt={item.judul || "Ilustrasi Ide"} />
+              <div key={item.id_ide || index} className="ide-card" onClick={() => navigate(`/ide/${item.id_ide}`)}>
+                <div className="image-wrapper">
+                  <img src={imgSrc} alt={item.judul || "Ilustrasi Ide"} />
+                </div>
                 
-                <div className="ide-card-body">
-                  {/* Bagian Meta Atas (Tanggal & Badge) */}
-                  <div className="card-meta-top">
-                    <span className="ide-date">
-                      <i className="fa-regular fa-calendar"></i> 
-                      {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Tanggal tidak tersedia'}
-                    </span>
-                    <span className={`status-badge ${statusLokal}`}>
-                      {item.status || 'Publish'}
-                    </span>
-                  </div>
-
-                  {/* Konten Utama */}
-                  <h4>{item.judul}</h4>
-                  <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
+                <div className="ide-content">
+                  <h3>{item.judul}</h3>
+                  <p>{item.isi && item.isi.length > 120 ? `${item.isi.substring(0, 120)}...` : item.isi}</p>
                   
-                  {/* Bagian Meta Bawah (Author & Votes) */}
-                  <div className="card-meta-bottom">
-                    <span className="author">
-                      <i className="fa-regular fa-user"></i> {item.nama || `Warga (ID: ${item.id_user})`}
-                    </span>
-                    <div className="votes">
-                      <span className="vote-item like">
-                        <i className="fa-regular fa-thumbs-up"></i> {item.jumlah_like || 0}
-                      </span>
-                    </div>
+                  <div className="ide-footer">
+                    <span>❤️ {item.jumlah_like || 0}</span>
+                    <button onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/ide/${item.id_ide}`);
+                    }}>Detail</button>
                   </div>
-
                 </div>
               </div>
             );

@@ -94,8 +94,6 @@ function Profile() {
     "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop"
   ];
 
-  const likedPosts = [];
-
   return (
     <div className="profile-page-wrapper" style={{ backgroundColor: 'var(--bg-light)', minHeight: '100vh' }}>
       
@@ -109,11 +107,8 @@ function Profile() {
         
         {/* SIDEBAR NAVIGASI KIRI */}
         <aside className="profile-sidebar">
-          <button className="sidebar-icon" onClick={handleToHome} title="Tambah Ide Baru">
+          <button className="sidebar-icon" onClick={() => navigate('/ide/tambah')} title="Tambah Ide Baru">
             <i className="fa-solid fa-square-plus"></i>
-          </button>
-          <button className="sidebar-icon" onClick={handleToMessages} title="Pesan / Chat">
-            <i className="fa-regular fa-message"></i>
           </button>
           <button className="sidebar-icon" onClick={handleToSettings} title="Pengaturan Biodata">
             <i className="fa-solid fa-gear"></i>
@@ -195,19 +190,20 @@ function Profile() {
                 </div>
               ) : publishedIdeas.length > 0 ? (
                 publishedIdeas.map((item, index) => (
-                  <div key={item.id_ide || index} className="profile-post-card" onClick={() => navigate(`/ide/${item.id_ide}`)} style={{ cursor: 'pointer' }}>
-                    <img src={item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : placeholderImages[index % 3]} alt={item.judul} />
-                    <div className="profile-post-body">
-                      <span className="post-date">
-                        <i className="fa-regular fa-calendar"></i> 
-                        {item.tgl_input || '-'}
-                      </span>
-                      <h4>{item.judul}</h4>
-                      <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
-                      
-                      <span className="status-badge" style={{ backgroundColor: '#cce5ff', color: '#004085' }}>
-                        PUBLISH
-                      </span>
+                  <div key={item.id_ide || index} className="ide-card" onClick={() => navigate(`/ide/${item.id_ide}`)}>
+                    <div className="image-wrapper">
+                      <img src={item.gambar ? `${API_URL.replace('/index.php', '')}/uploads/ide/${item.gambar}` : placeholderImages[index % 3]} alt={item.judul} />
+                    </div>
+                    <div className="ide-content">
+                      <h3>{item.judul}</h3>
+                      <p>{item.isi && item.isi.length > 120 ? `${item.isi.substring(0, 120)}...` : item.isi}</p>
+                      <div className="ide-footer">
+                        <span>❤️ {item.jumlah_like || 0}</span>
+                        <button onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/ide/${item.id_ide}`);
+                        }}>Detail</button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -218,23 +214,21 @@ function Profile() {
                 </div>
               )
             ) : (
-              likedPosts.length > 0 ? (
-                likedPosts.map((item, index) => (
-                  <div key={item.id_ide || index} className="profile-post-card">
-                    <img src={item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : item.image || placeholderImages[index % 3]} alt={item.judul} />
-                    <div className="profile-post-body">
-                      <span className="post-date">
-                        <i className="fa-regular fa-calendar"></i> 
-                        {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
-                      </span>
-                      <h4>{item.judul}</h4>
-                      <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
-                      
-                      <div className="card-meta-bottom" style={{ borderTop: 'none', paddingTop: '0' }}>
-                        <span className={`status-badge ${item.status ? item.status.toLowerCase() : ''}`}>
-                          {item.status}
-                        </span>
-                        <i className="fa-solid fa-heart" style={{ color: '#EA4335', fontSize: '18px' }}></i>
+              publishedIdeas.length > 0 ? (
+                publishedIdeas.map((item, index) => (
+                  <div key={item.id_ide || index} className="ide-card" onClick={() => navigate(`/ide/${item.id_ide}`)}>
+                    <div className="image-wrapper">
+                      <img src={item.gambar ? `${API_URL.replace('/index.php', '')}/uploads/ide/${item.gambar}` : placeholderImages[index % 3]} alt={item.judul} />
+                    </div>
+                    <div className="ide-content">
+                      <h3>{item.judul}</h3>
+                      <p>{item.isi && item.isi.length > 120 ? `${item.isi.substring(0, 120)}...` : item.isi}</p>
+                      <div className="ide-footer">
+                        <span>❤️ {item.jumlah_like || 0}</span>
+                        <button onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/ide/${item.id_ide}`);
+                        }}>Detail</button>
                       </div>
                     </div>
                   </div>
@@ -242,7 +236,7 @@ function Profile() {
               ) : (
                 <div className="status-container empty" style={{ gridColumn: 'span 2' }}>
                   <i className="fa-regular fa-heart fa-2x"></i>
-                  <p>Belum ada postingan yang disukai.</p>
+                  <p>Belum ada ide yang diunggah.</p>
                 </div>
               )
             )}

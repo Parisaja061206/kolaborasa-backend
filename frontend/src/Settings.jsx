@@ -106,11 +106,8 @@ function EditProfile() {
         
         {/* SIDEBAR NAVIGASI KIRI */}
         <aside className="profile-sidebar" style={{ marginTop: '30px' }}>
-          <button className="sidebar-icon" onClick={handleToHome} title="Tambah Ide Baru">
+          <button className="sidebar-icon" onClick={() => navigate('/ide/tambah')} title="Tambah Ide Baru">
             <i className="fa-solid fa-square-plus"></i>
-          </button>
-          <button className="sidebar-icon" onClick={handleToMessages} title="Pesan / Chat">
-            <i className="fa-regular fa-message"></i>
           </button>
           {/* Class 'active' diletakkan di ikon gear */}
           <button className="sidebar-icon active" title="Pengaturan Biodata">
@@ -125,36 +122,16 @@ function EditProfile() {
         <section className="edit-profile-card-wrapper">
           <div className="edit-profile-main-card">
             
-            {/* AVATAR DENGAN TOMBOL PLUS */}
+            {/* AVATAR */}
             <div className="edit-profile-avatar-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
               <div style={{ position: 'relative', display: 'inline-block' }}>
                 <img 
                   src={getProfileImageUrl()} 
                   alt="Avatar" 
                   className="edit-profile-avatar-img"
+                  onClick={() => document.getElementById('upload-photo').click()}
+                  style={{ cursor: 'pointer' }}
                 />
-                <label 
-                  htmlFor="upload-photo" 
-                  style={{
-                    position: 'absolute',
-                    bottom: '5px',
-                    right: '10px',
-                    backgroundColor: '#0A2640',
-                    color: 'white',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    border: '3px solid white',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                  }}
-                  title="Ganti Foto Profil"
-                >
-                  <i className="fa-solid fa-plus"></i>
-                </label>
                 <input 
                   id="upload-photo"
                   type="file" 

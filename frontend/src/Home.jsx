@@ -119,16 +119,23 @@ function Home() {
           <div className="ide-track">
             {ideTerbaruData.length > 0 ? (
               ideTerbaruData.map((item) => (
-                <div className="ide-card" key={item.id_ide} onClick={() => navigate(`/ide/${item.id_ide}`)} style={{ cursor: 'pointer' }}>
-                  <img 
-                    src={item.gambar ? `${API_URL.replace('/index.php', '')}/uploads/ide/${item.gambar}` : "https://via.placeholder.com/400x250"} 
-                    alt={item.judul} 
-                  />
-                  <div className="ide-card-body">
-                    <span className="ide-date"><i className="fa-regular fa-calendar"></i> {item.tgl_input || 'Baru saja'}</span>
-                    <h4>{item.judul}</h4>
-                    <p>{item.isi?.substring(0, 100)}...</p>
-                    <Link to={`/ide/${item.id_ide}`} className="ide-link"><i className="fa-solid fa-angle-right"></i> Lihat Detail</Link>
+                <div className="ide-card" key={item.id_ide} onClick={() => navigate(`/ide/${item.id_ide}`)}>
+                  <div className="image-wrapper">
+                    <img 
+                      src={item.gambar ? `${API_URL.replace('/index.php', '')}/uploads/ide/${item.gambar}` : "https://via.placeholder.com/400x250"} 
+                      alt={item.judul} 
+                    />
+                  </div>
+                  <div className="ide-content">
+                    <h3>{item.judul}</h3>
+                    <p>{item.isi?.substring(0, 120)}...</p>
+                    <div className="ide-footer">
+                      <span>❤️ {item.jumlah_like || 0}</span>
+                      <button onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/ide/${item.id_ide}`);
+                      }}>Detail</button>
+                    </div>
                   </div>
                 </div>
               ))
