@@ -61,13 +61,13 @@
 }
 
 .form-container h1 {
-  text-align: center;
+  text-align: right;
   color: #1d2d6b;
   margin-bottom: 10px;
 }
 
 .form-container p {
-  text-align: center;
+  text-align: right;
   color: #666;
   margin-bottom: 30px;
 }
@@ -93,7 +93,7 @@
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 14px;
-  color: #1f2937;
+  color: #657b9a;
   outline: none;
   box-sizing: border-box;
   font-family: inherit;

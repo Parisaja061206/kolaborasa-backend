@@ -67,7 +67,7 @@ function IdeForm() {
     <div className="form-page">
       <div className="hero-banner">
         {/* ganti src dengan path gambar kota Anda sendiri */}
-        <img src="/images/hero-banner.jpg" alt="" />
+        <img src="/src/assets/Body Landing Page.png" alt="" />
         <Navbar />
       </div>
 

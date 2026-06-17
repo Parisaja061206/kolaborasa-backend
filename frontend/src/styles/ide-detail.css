@@ -2,13 +2,22 @@
     width:100%;
     min-height:100vh;
     background:#f5f7fb;
-    padding-bottom:60px;
+    /* padding-bottom:60px; */
+}
+
+.main-content {
+    flex: 1; 
+    padding-bottom: 60px; 
 }
 
 /* HEADER */
 
-.detail-header{
-    background:#1d2d6b;
+.detail-header{background-image:linear-gradient(rgba(48, 52, 129, 0.5), rgba(48, 52, 129, 0.5)),url("https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b");
+
+  
+    background-size:cover;
+    background-position:center;
+    /* background:#1d2d6b; */
     color:white;
 
     padding:70px 20px;
@@ -73,6 +82,7 @@
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 
     white-space:pre-wrap;
+    text-align:left ;
 }
 
 /* ACTION */

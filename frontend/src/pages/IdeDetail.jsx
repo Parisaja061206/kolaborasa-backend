@@ -78,7 +78,7 @@ function IdeDetail() {
   return (
     <div className="detail-page">
         <Navbar/>
-
+      <div className="main-content">
       {/* HEADER */}
 
       <section className="detail-header">
@@ -137,6 +137,7 @@ function IdeDetail() {
         </button>
 
       </section>
+      </div>
       <Footer/>
 
     </div>

@@ -7,7 +7,8 @@
 
 .ide-hero{
     height:350px;
-    background-image:url("https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b");
+    background-image:linear-gradient(rgba(48, 52, 129, 0.5), rgba(48, 52, 129, 0.5)),url("https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b");
+
     background-size:cover;
     background-position:center;
     position:relative;
