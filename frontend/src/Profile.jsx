@@ -12,7 +12,7 @@ function Profile() {
   const user = userStr ? JSON.parse(userStr) : null;
   
   // 2. STATE MANAJEMEN
-  const [activeTab, setActiveTab] = useState('Draft'); // Default tab
+  const [activeTab, setActiveTab] = useState('Unggahan'); // Default tab
   const [aspirasiKu, setAspirasiKu] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -172,14 +172,14 @@ function Profile() {
             <div className="profile-stats">
               <div className="stat-box">
                 <h4>{loading ? '...' : formatNumber(publishedIdeas.length)}</h4>
-                <span>Ide Publik</span>
+                <span>Jumlah Unggahan</span>
               </div>
               <div className="stat-box">
                 <h4>{loading ? '...' : formatNumber(totalLikes)}</h4>
                 <span>likes</span>
               </div>
               <div className="stat-box">
-                <h4>67</h4>
+                <h4>0</h4>
                 <span>following</span>
               </div>
             </div>
@@ -204,10 +204,10 @@ function Profile() {
           {/* Navigasi Tab */}
           <div className="profile-tabs">
             <button 
-              className={activeTab === 'Draft' ? 'active' : ''} 
-              onClick={() => setActiveTab('Draft')}
+              className={activeTab === 'Unggahan' ? 'active' : ''} 
+              onClick={() => setActiveTab('Unggahan')}
             >
-              Draft <span style={{fontSize: '12px', color: '#888'}}>({loading ? 0 : draftIdeas.length})</span>
+              Jumlah Unggahan <span style={{fontSize: '12px', color: '#888'}}>({loading ? 0 : publishedIdeas.length})</span>
             </button>
             <button 
               className={activeTab === 'Likes' ? 'active' : ''} 
@@ -220,33 +220,33 @@ function Profile() {
           {/* Grid Postingan Dinamis */}
           <div className="profile-post-grid">
             
-            {activeTab === 'Draft' ? (
+            {activeTab === 'Unggahan' ? (
               
-              // ================= TAB DRAFT =================
+              // ================= TAB UNGGAHAN =================
               loading ? (
                 <div className="status-container" style={{ gridColumn: 'span 2' }}>
                   <i className="fa-solid fa-spinner fa-spin fa-2x"></i>
-                  <p>Memuat draft Anda...</p>
+                  <p>Memuat unggahan Anda...</p>
                 </div>
               ) : error ? (
                 <div className="status-container error" style={{ gridColumn: 'span 2' }}>
                   <p>Error: {error}</p>
                 </div>
-              ) : draftIdeas.length > 0 ? (
-                draftIdeas.map((item, index) => (
-                  <div key={item.id_ide || index} className="profile-post-card">
+              ) : publishedIdeas.length > 0 ? (
+                publishedIdeas.map((item, index) => (
+                  <div key={item.id_ide || index} className="profile-post-card" onClick={() => navigate(`/ide/${item.id_ide}`)} style={{ cursor: 'pointer' }}>
                     <img src={item.gambar ? `${API_URL.replace('/backend/index.php', '')}/backend/uploads/ide/${item.gambar}` : placeholderImages[index % 3]} alt={item.judul} />
                     <div className="profile-post-body">
                       <span className="post-date">
                         <i className="fa-regular fa-calendar"></i> 
-                        {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
+                        {item.tgl_input || '-'}
                       </span>
                       <h4>{item.judul}</h4>
                       <p>{item.isi && item.isi.length > 100 ? `${item.isi.substring(0, 100)}...` : item.isi}</p>
                       
-                      {/* Badge DRAFT di pojok bawah */}
-                      <span className="status-badge" style={{ backgroundColor: '#e2e3e5', color: '#383d41' }}>
-                        DRAFT
+                      {/* Status PUBLISH */}
+                      <span className="status-badge" style={{ backgroundColor: '#cce5ff', color: '#004085' }}>
+                        PUBLISH
                       </span>
                     </div>
                   </div>
@@ -254,7 +254,7 @@ function Profile() {
               ) : (
                 <div className="status-container empty" style={{ gridColumn: 'span 2' }}>
                   <i className="fa-regular fa-file-lines fa-2x"></i>
-                  <p>Anda belum memiliki ide yang tersimpan sebagai draft.</p>
+                  <p>Anda belum memiliki ide yang dipublikasikan.</p>
                 </div>
               )
               

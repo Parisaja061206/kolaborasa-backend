@@ -14,7 +14,7 @@ function EditProfile() {
     nama: user?.nama || '',
     email: user?.email || '',
     password: '', // Biasanya password tidak ditampilkan
-    tanggalLahir: user?.tanggalLahir || ''
+    tanggal_lahir: user?.tanggal_lahir || ''
   });
   const [fotoFile, setFotoFile] = useState(null);
   const [previewURL, setPreviewURL] = useState('');
@@ -58,6 +58,7 @@ function EditProfile() {
       dataToSend.append('id_user', user.id_user);
       dataToSend.append('nama', formData.nama);
       dataToSend.append('email', formData.email);
+      dataToSend.append('tanggal_lahir', formData.tanggal_lahir);
       if (formData.password) {
         dataToSend.append('password', formData.password);
       }
@@ -202,8 +203,8 @@ function EditProfile() {
                 <label>HARI/TANGGAL LAHIR</label>
                 <input 
                   type="date" 
-                  name="tanggalLahir" 
-                  value={formData.tanggalLahir} 
+                  name="tanggal_lahir" 
+                  value={formData.tanggal_lahir} 
                   onChange={handleChange} 
                 />
               </div>

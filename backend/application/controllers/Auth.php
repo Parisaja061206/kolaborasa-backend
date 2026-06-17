@@ -6,6 +6,7 @@ class Auth extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->load->model('User_model');
         $this->sendCorsHeaders();
 
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -43,20 +44,21 @@ class Auth extends CI_Controller {
         $email = trim($input['email'] ?? '');
         $password = trim($input['password'] ?? '');
         $nama = trim($input['nama'] ?? $input['name'] ?? '');
+        $tanggal_lahir = trim($input['tanggal_lahir'] ?? $input['tanggalLahir'] ?? '');
 
         if ($email !== '' && $password !== '' && $nama !== '') {
-            $cek_email = $this->db->get_where('user', ['email' => $email])->num_rows();
-            if ($cek_email > 0) {
+            if ($this->User_model->checkEmailExists($email)) {
                 return $this->apiResponse(['status' => 'gagal', 'pesan' => 'Email sudah terdaftar!'], 409);
             }
 
             $data_user = [
-                'email'    => $email,
-                'nama'     => $nama,
-                'password' => password_hash($password, PASSWORD_BCRYPT)
+                'email'         => $email,
+                'nama'          => $nama,
+                'password'      => password_hash($password, PASSWORD_BCRYPT),
+                'tanggal_lahir' => ($tanggal_lahir !== '') ? $tanggal_lahir : null
             ];
 
-            $this->db->insert('user', $data_user);
+            $this->User_model->insert($data_user);
             return $this->apiResponse(['status' => 'sukses', 'pesan' => 'Registrasi berhasil! Silakan login.']);
         }
 
@@ -72,7 +74,7 @@ class Auth extends CI_Controller {
         $password = trim($input['password'] ?? '');
 
         if ($email !== '' && $password !== '') {
-            $user = $this->db->get_where('user', ['email' => $email])->row_array();
+            $user = $this->User_model->getByEmail($email);
             if ($user && password_verify($password, $user['password'])) {
                 unset($user['password']);
                 return $this->apiResponse([
@@ -99,24 +101,26 @@ class Auth extends CI_Controller {
             $email = trim($this->input->post('email') ?? '');
             $nama = trim($this->input->post('nama') ?? '');
             $password = trim($this->input->post('password') ?? '');
+            $tanggal_lahir = trim($this->input->post('tanggal_lahir') ?? '');
         } else {
             $input = $this->getJsonInput();
             $id_user = $input['id_user'] ?? '';
             $email = trim($input['email'] ?? '');
             $nama = trim($input['nama'] ?? '');
             $password = trim($input['password'] ?? '');
+            $tanggal_lahir = trim($input['tanggal_lahir'] ?? '');
         }
 
         if ($id_user !== '' && $email !== '' && $nama !== '') {
             // Cek apakah email sudah dipakai user lain
-            $cek_email = $this->db->get_where('user', ['email' => $email, 'id_user !=' => $id_user])->num_rows();
-            if ($cek_email > 0) {
+            if ($this->User_model->checkEmailOtherUser($email, $id_user)) {
                 return $this->apiResponse(['status' => 'gagal', 'pesan' => 'Email sudah digunakan oleh akun lain!'], 409);
             }
 
             $update_data = [
                 'nama' => $nama,
-                'email' => $email
+                'email' => $email,
+                'tanggal_lahir' => ($tanggal_lahir !== '') ? $tanggal_lahir : null
             ];
 
             if ($password !== '') {
@@ -142,7 +146,7 @@ class Auth extends CI_Controller {
                     $update_data['foto'] = $upload_data['file_name'];
                     
                     // Ambil foto lama untuk dihapus
-                    $old_user = $this->db->get_where('user', ['id_user' => $id_user])->row_array();
+                    $old_user = $this->User_model->getById($id_user);
                     if ($old_user && !empty($old_user['foto']) && file_exists($upload_path . $old_user['foto'])) {
                         @unlink($upload_path . $old_user['foto']);
                     }
@@ -151,11 +155,10 @@ class Auth extends CI_Controller {
                 }
             }
 
-            $this->db->where('id_user', $id_user);
-            $this->db->update('user', $update_data);
+            $this->User_model->update($id_user, $update_data);
 
             // Ambil data terbaru untuk di-return
-            $user = $this->db->get_where('user', ['id_user' => $id_user])->row_array();
+            $user = $this->User_model->getById($id_user);
             if ($user) {
                 unset($user['password']);
                 return $this->apiResponse([
