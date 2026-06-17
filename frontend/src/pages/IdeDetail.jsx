@@ -85,10 +85,18 @@ function IdeDetail() {
 
         <h1>{ide.judul}</h1>
 
-        <p>
-          Lokasi:
-          <span>{ide.lokasi}</span>
-        </p>
+        <div className="detail-meta">
+          <p>
+            Lokasi:
+            <span>{ide.lokasi}</span>
+          </p>
+          <span className={`status-badge ${ide.status}`}>
+            {ide.status === 'publish' ? 'Diterima' : 
+             ide.status === 'review' ? 'Ditinjau' : 
+             ide.status === 'process' ? 'Dalam Pengerjaan' : 
+             ide.status === 'done' ? 'Selesai' : 'Pending'}
+          </span>
+        </div>
 
       </section>
 

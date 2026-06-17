@@ -9,7 +9,8 @@ function Navbar() {
       <div className="nav-brand">KOLABORASA</div>
       <ul className="nav-links">
         <li><Link to="/home" className={location.pathname === '/home' ? 'active' : ''}>Home</Link></li>
-        <li><Link to="/ide" className={location.pathname === '/news' ? 'active' : ''}>Ide Publik</Link></li>
+        <li><Link to="/ide" className={location.pathname === '/ide' ? 'active' : ''}>Ide Publik</Link></li>
+        <li><Link to="/dashboard" className={location.pathname === '/dashboard' ? 'active' : ''}>Dashboard</Link></li>
         <li><Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>Profile</Link></li>
       </ul>
     </nav>
